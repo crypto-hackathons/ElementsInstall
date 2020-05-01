@@ -1,0 +1,26 @@
+
+export PROJECT_DIR="/opt/project"
+export DB4_INSTALL_PATH="/opt"
+export BDB_PREFIX="/opt/db4"
+export PROJECT_ELEMENTS_DIR="$PROJECT_DIR/elements"
+
+# Bitcoin configuration 
+export PROJECT_BITCOIN_DIR="$PROJECT_DIR/bitcoin"
+alias btc="$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest"
+alias btcd="$PROJECT_BITCOIN_DIR/src/./bitcoind -regtest"
+alias b-dae="btcd -datadir=$BITCOIN_DIR"
+
+# Simplicity configuration
+export PROJECT_SIMPLICITY_DIR="$PROJECT_DIR/simplicity"
+export PROJECT_HAL_DIR="$PROJECT_DIR/hal"
+alias simplicityenv="cd $PROJECT_SIMPLICITY_DIR && nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
+
+# personas configuration
+export USER_BITCOIN_DIR="$HOME/bitcoindir"
+export USER_ALICE_DIR="$HOME/alice"
+export USER_BOB_DIR="$HOME/bob"
+alias b-cli="btc -datadir=$BITCOIN_DIR"
+alias alice-dae="elementsd -datadir=$USER_ALICE_DIR"
+alias alice-cli="elements-cli -datadir=$USER_ALICE_DIR"
+alias bob-dae="elementsd -datadir=$USER_BOB_DIR"
+alias bob-cli="elements-cli -datadir=$USER_BOB_DIR"
