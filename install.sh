@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 # Configuration
 export PROJECT_USER=$1
 export INSTALL_DIR=`pwd`
@@ -20,9 +19,15 @@ chmod 0755 $PROJECT_DIR && chown $PROJECT_USER $PROJECT_DIR
 echo "**************"
 echo "Apt install"
 echo "**************"
-apt-get update && apt-get upgrade
-apt-get install git build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make
-apt-get update --fix-missing
+
+echo "apt-get update && apt-get upgrade >> apt_update.log"
+apt-get update && apt-get upgrade >> apt_update.log
+
+echo "apt-get install git build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make  >> apt.log"
+apt-get install git build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make  >> apt.log
+
+echo "apt-get update --fix-missing >> apt_missing.lo"
+apt-get update --fix-missing >> apt_missing.log
 
 echo "**************"
 echo "Berkeley DB"
@@ -31,7 +36,9 @@ cd $PROJECT_DIR
 git clone https://github.com/ElementsProject/elements.git
 chmod 0755 $PROJECT_ELEMENTS_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
 cd $PROJECT_ELEMENTS_DIR
-./contrib/install_db4.sh $DB4_INSTALL_PATH
+
+echo "./contrib/install_db4.sh $DB4_INSTALL_PATH  >> bd4.log"
+./contrib/install_db4.sh $DB4_INSTALL_PATH  >> bd4.log
 
 echo "**************"
 echo "Bitcoin"
@@ -42,8 +49,13 @@ chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
 cd $PROJECT_BITCOIN_DIR
 git checkout simplicity
 su $PROJECT_USER -c ./autogen.sh
-su $PROJECT_USER -c ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench
-make
+
+echo "su $PROJECT_USER -c ./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> bitcoin_configure.log"
+su $PROJECT_USER -c ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> bitcoin_configure.log
+ 
+echo "make >> bitcoin_make.log" 
+make >> bitcoin_make.log
+
 cd $PROJECT_BITCOIN_DIR
 
 alias btc="$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest"
@@ -87,9 +99,15 @@ echo "Elements"
 echo "**************"
 cd $PROJECT_ELEMENTS_DIR
 su $PROJECT_USER -c ./autogen.sh
-su $PROJECT_USER -c ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench
-make
-make install
+
+echo "su $PROJECT_USER -c ./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> elements_congigure.log"
+su $PROJECT_USER -c ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> elements_congigure.log
+
+echo "make >> elements_make.log"
+make >> element_make.log
+
+echo "make install >> elements_make_install.log"
+make install >> elements_make_install.log
 which elementsd
 
 echo "**************"
@@ -141,4 +159,3 @@ echo "**************"
 chmod +x elementsProjectStart.sh
 chmod +x elementsProjectStop.sh
 chmod +x test_transaction_simple.sh
-
