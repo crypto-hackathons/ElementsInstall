@@ -1,6 +1,10 @@
+Tested for Debian 10.
+
+Your machine needs at least 1.5 GB of memory and 12 GB of storage.
+
 # Elements Project Environnement
 
- ## Configure:
+## Configure:
 
 Your configuration in the elementsProject file.
 
