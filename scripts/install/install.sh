@@ -25,7 +25,7 @@ echo "**************"
 echo "Apt install"
 echo "**************"
 echo "apt-get update >> $INSTALL_LOG_DIR/apt_update.log"
-apt-get update  >> $INSTALL_LOG_DIR/apt_update.log
+apt-get update >> $INSTALL_LOG_DIR/apt_update.log
 echo "apt-get upgrade >> $INSTALL_LOG_DIR/apt_upgrade.log"
 apt-get upgrade >> $INSTALL_LOG_DIR/apt_upgrade.log
 
@@ -38,9 +38,13 @@ apt-get update --fix-missing >> $INSTALL_LOG_DIR/apt_missing.log
 echo "**************"
 echo "Berkeley DB"
 echo "**************"
+echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
+echo "git clone https://github.com/ElementsProject/elements.git"
 git clone https://github.com/ElementsProject/elements.git
+echo "chmod 0755 $PROJECT_ELEMENTS_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR" 
 chmod 0755 $PROJECT_ELEMENTS_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
+echo "cd $PROJECT_ELEMENTS_DIR"
 cd $PROJECT_ELEMENTS_DIR
 
 echo "./contrib/install_db4.sh $DB4_INSTALL_PATH >> $INSTALL_LOG_DIR/bd4.log"
@@ -49,9 +53,13 @@ echo "./contrib/install_db4.sh $DB4_INSTALL_PATH >> $INSTALL_LOG_DIR/bd4.log"
 echo "**************"
 echo "Bitcoin"
 echo "**************"
+echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
+echo "git clone https://github.com/roconnor-blockstream/bitcoin.git"
 git clone https://github.com/roconnor-blockstream/bitcoin.git
+echo "chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR"
 chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
+echo "cd $PROJECT_BITCOIN_DIR"
 cd $PROJECT_BITCOIN_DIR
 git checkout simplicity
 userDo ./autogen.sh
@@ -62,6 +70,7 @@ userDo ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${B
 echo "make >> $INSTALL_LOG_DIR/bitcoin_make.log" 
 make >> $INSTALL_LOG_DIR/bitcoin_make.log
 
+echo "cd $PROJECT_BITCOIN_DIR"
 cd $PROJECT_BITCOIN_DIR
 
 alias btc="$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest"
@@ -75,26 +84,42 @@ btcd -daemon
 echo "**************"
 echo "Simplicity"
 echo "**************"
+echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
+echo "git clone https://github.com/ElementsProject/simplicity.git"
 git clone https://github.com/ElementsProject/simplicity.git
+echo "chmod 0755 $PROJECT_SIMPLICITY_DIR && chown $PROJECT_USER $PROJECT_SIMPLICITY"
 chmod 0755 $PROJECT_SIMPLICITY_DIR && chown $PROJECT_USER $PROJECT_SIMPLICITY
 userDo cabal update
 userDo cabal install bech32-1.0.2
 userDo cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie
+echo "cd $PROJECT_SIMPLICITY_DIR"
 cd $PROJECT_SIMPLICITY_DIR
+echo "git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4"
 git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4
+echo "userDo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
 userDo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+echo "userDo source $HOME/.cargo/env"
 userDo source $HOME/.cargo/env
+echo "mkdir $PROJECT_HAL_DIR"
 mkdir $PROJECT_HAL_DIR
+echo "chmod 0755 $PROJECT_HAL_DIR && chown $PROJECT_USER $PROJECT_HAL_DIR"
 chmod 0755 $PROJECT_HAL_DIR && chown $PROJECT_USER $PROJECT_HAL_DIR
+echo "cd $PROJECT_HAL_DIR"
 cd $PROJECT_HAL_DIR
+echo "wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz"
 wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz
 userDo tar xzf hal-0.6.1-vendored.tar.gz
 userDo cargo install hal
+echo "mkdir -m 0755 /nix && chown $PROJECT_USER /nix"
 mkdir -m 0755 /nix && chown $PROJECT_USER /nix
+echo "userDo curl https://nixos.org/nix/install | sh"
 userDo curl https://nixos.org/nix/install | sh
+echo "userDo . /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh"
 userDo . /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh
-cd $PROJECT_SIMPLICITY_DIR 
+echo "cd $PROJECT_SIMPLICITY_DIR"
+cd $PROJECT_SIMPLICITY_DIR
+echo "userDo nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\"" 
 userDo nix-shell -p "(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])"
 
 alias simplicityenv="cd $PROJECT_SIMPLICITY_DIR && nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
@@ -103,7 +128,9 @@ echo "simplicityenv = cd $PROJECT_SIMPLICITY_DIR && nix-shell -p \"(import ./def
 echo "**************"
 echo "Elements"
 echo "**************"
+echo "cd $PROJECT_ELEMENTS_DIR"
 cd $PROJECT_ELEMENTS_DIR
+echo "userDo ./autogen.sh" 
 userDo ./autogen.sh
 
 echo "userDo ./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/elements_congigure.log"
@@ -119,17 +146,24 @@ which elementsd
 echo "**************"
 echo "Personas"
 echo "**************"
-cd $PROJECT_ELMENTS_DIR/contrib/assets_tutorial
+echo "cd $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"
+cd $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial
 
+echo "mkdir $USER_BITCOIN_DIR" 
 mkdir $USER_BITCOIN_DIR
+echo "chmod 0755 $USER_BITCOIN_DIR && chown $PROJECT_USER $USER_BITCOIN_DIR"
 chmod 0755 $USER_BITCOIN_DIR && chown $PROJECT_USER $USER_BITCOIN_DIR
 cp ./bitcoin.conf $BITCOIN_DIR/bitcoin.conf
 
+echo "mkdir $USER_ALICE_DIR"
 mkdir $USER_ALICE_DIR
+echo "chmod 0755 $USER_ALICE_DIR && chown $PROJECT_USER $USER_ALICE_DIR"
 chmod 0755 $USER_ALICE_DIR && chown $PROJECT_USER $USER_ALICE_DIR
 cp ./elements1.conf $USER_ALICE_DIR/elements.conf
 
+echo "mkdir $USER_BOB_DIR"
 mkdir $USER_BOB_DIR
+echo "chmod 0755 $USER_BOB_DIR && chown $PROJECT_USER $USER_BOB_DIR"
 chmod 0755 $USER_BOB_DIR && chown $PROJECT_USER $USER_BOB_DIR
 cp ./elements2.conf $USER_BOB_DIR/elements.conf
 
@@ -143,14 +177,17 @@ bob-dae
 echo "**************"
 echo "Personas address"
 echo "**************"
+echo "userDo ALICE_MINER_ADDRESS=$(alice-cli getnewaddress)"
 userDo ALICE_MINER_ADDRESS=$(alice-cli getnewaddress)
 echo "ALICE_MINER_ADDRESS=$ALICE_MINER_ADDRESS" >> $PROJECT_CONF
 echo "echo \"ALICE_MINER_ADDRESS = \$ALICE_MINER_ADDRESS\"" >> $PROJECT_CONF
 
+echo "userDo ALICE_RECEIVER_ADDRESS=$(alice-cli getnewaddress)" 
 userDo ALICE_RECEIVER_ADDRESS=$(alice-cli getnewaddress)
 echo "ALICE_RECEIVER_ADDRESS=$ALICE_RECEIVER_ADDRESS" >> $PROJECT_CONF
 echo "echo \"ALICE_RECEIVER_ADDRESS = \$ALICE_RECEIVER_ADDRESS\"" >> $PROJECT_CONF
 
+echo "userDo BOB_RECEIVER_ADDRESS=$(bob-cli getnewaddress)"
 userDo BOB_RECEIVER_ADDRESS=$(bob-cli getnewaddress)
 echo "BOB_RECEIVER_ADDRESS=$BOB_RECEIVER_ADDRESS" >> $PROJECT_CONF
 echo "echo \"BOB_RECEIVER_ADDRESS = \$BOB_RECEIVER_ADDRESS\"" >> $PROJECT_CONF
@@ -162,9 +199,15 @@ echo "BOB_RECEIVER_ADDRESS = $BOB_RECEIVER_ADDRESS"
 echo "**************"
 echo "chmod +x"
 echo "**************"
+echo "cd $INSTALL_DIR"
+cd $INSTALL_DIR
+echo "chmod +x $INSTALL_DIR/elementsProjectStart.sh"
 chmod +x $INSTALL_DIR/elementsProjectStart.sh
+echo "chmod +x $INSTALL_DIR/elementsProjectStop.sh"
 chmod +x $INSTALL_DIR/elementsProjectStop.sh
+echo "chmod +x $INSTALL_DIR/test_transaction_simple.sh"
 chmod +x $INSTALL_TEST_DIR/test_transaction_simple.sh
 
-cd  $INSTALL_LOG_DIR
+echo "cd $INSTALL_LOG_DIR" 
+cd $INSTALL_LOG_DIR
 ls -al
