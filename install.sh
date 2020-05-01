@@ -86,5 +86,5 @@ echo "ALICE_RECEIVER_ADDRESS=$ALICE_RECEIVER_ADDRESS" >> $PROJECT_CONF
 BOB_RECEIVER_ADDRESS=$(bob-cli getnewaddress)
 echo "BOB_RECEIVER_ADDRESS=$BOB_RECEIVER_ADDRESS" >> $PROJECT_CONF
 
-chmod +x elementsProjhectStart.sh
+chmod +x elementsProjhectStart.sh 
 
