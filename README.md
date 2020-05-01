@@ -6,7 +6,7 @@ Your configuration
 
 elementsProjectStart.sh# Install : install.sh
 
-The install script, type in superuser:
+## The install script, type in superuser:
 
 chmod +x install.sh && ./install.sh $USER
 
