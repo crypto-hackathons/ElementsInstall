@@ -46,8 +46,8 @@ userDo "git checkout simplicity"
 # userDo ./autogen.sh  >>  $INSTALL_LOG_DIR/bitcoin_autogen.log
 echo "./autogen.sh >>  $INSTALL_LOG_DIR/bitcoin_autogen.log" 
 ./autogen.sh >>  $INSTALL_LOG_DIR/bitcoin_autogen.log
-echo "userDo ./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/bitcoin_configure.log"
-userDo ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/bitcoin_configure.log
+echo "userDo \"./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/bitcoin_configure.log""
+userDo "./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/bitcoin_configure.log"
  
 echo "make >> $INSTALL_LOG_DIR/bitcoin_make.log" 
 make >> $INSTALL_LOG_DIR/bitcoin_make.log
