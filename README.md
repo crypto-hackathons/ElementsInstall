@@ -18,7 +18,7 @@ Type: ./elementsProjectStart.sh $USER
 
 ## Stop:
 
-Type: ./elementsProjectStart.sh $USER
+Type: ./elementsProjectStop.sh $USER
 
 ## Test:
 
