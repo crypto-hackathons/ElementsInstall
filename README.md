@@ -10,16 +10,16 @@ Your configuration in the elementsProject file.
 
 ## Install:
 
-Type in superuser:
+Type in superuser: chmod +x install.sh && ./install.sh $USER
 
-chmod +x install.sh && ./install.sh $USER
+## Start:
 
-## Run:
+Type: ./elementsProjectStart.sh $USER
 
-Type:
+## Stop:
 
-./elementsProjectStart.sh $USER
+Type: ./elementsProjectStart.sh $USER
 
 ## Test:
 
-./test_transaction_simple.sh $USER
+Type: ./test_transaction_simple.sh $USER
