@@ -20,14 +20,14 @@ echo "**************"
 echo "Apt install"
 echo "**************"
 
-echo "apt-get update && apt-get upgrade >> apt_update.log"
-apt-get update && apt-get upgrade >> apt_update.log
+echo "apt-get update && apt-get upgrade >> $INSTALL_DIR/apt_update.log"
+apt-get update && apt-get upgrade >> $INSTALL_DIR/apt_update.log
 
-echo "apt-get install git build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make  >> apt.log"
-apt-get install git build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make  >> apt.log
+echo "apt-get install git build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make  >> $INSTALL_DIR/apt.log"
+apt-get install git build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make  >> $INSTALL_DIR/apt.log
 
-echo "apt-get update --fix-missing >> apt_missing.lo"
-apt-get update --fix-missing >> apt_missing.log
+echo "apt-get update --fix-missing >> $INSTALL_DIR/apt_missing.lo"
+apt-get update --fix-missing >> $INSTALL_DIR/apt_missing.log
 
 echo "**************"
 echo "Berkeley DB"
@@ -37,8 +37,8 @@ git clone https://github.com/ElementsProject/elements.git
 chmod 0755 $PROJECT_ELEMENTS_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
 cd $PROJECT_ELEMENTS_DIR
 
-echo "./contrib/install_db4.sh $DB4_INSTALL_PATH  >> bd4.log"
-./contrib/install_db4.sh $DB4_INSTALL_PATH  >> bd4.log
+echo "./contrib/install_db4.sh $DB4_INSTALL_PATH  >> $INSTALL_DIR/bd4.log"
+./contrib/install_db4.sh $DB4_INSTALL_PATH  >> $INSTALL_DIR/bd4.log
 
 echo "**************"
 echo "Bitcoin"
@@ -50,11 +50,11 @@ cd $PROJECT_BITCOIN_DIR
 git checkout simplicity
 su $PROJECT_USER -c ./autogen.sh
 
-echo "su $PROJECT_USER -c ./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> bitcoin_configure.log"
-su $PROJECT_USER -c ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> bitcoin_configure.log
+echo "su $PROJECT_USER -c ./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_DIR/bitcoin_configure.log"
+su $PROJECT_USER -c ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_DIR/bitcoin_configure.log
  
-echo "make >> bitcoin_make.log" 
-make >> bitcoin_make.log
+echo "make >> $INSTALL_DIR/bitcoin_make.log" 
+make >> $INSTALL_DIR/bitcoin_make.log
 
 cd $PROJECT_BITCOIN_DIR
 
@@ -100,14 +100,14 @@ echo "**************"
 cd $PROJECT_ELEMENTS_DIR
 su $PROJECT_USER -c ./autogen.sh
 
-echo "su $PROJECT_USER -c ./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> elements_congigure.log"
-su $PROJECT_USER -c ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> elements_congigure.log
+echo "su $PROJECT_USER -c ./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_DIR/elements_congigure.log"
+su $PROJECT_USER -c ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_DIR/elements_congigure.log
 
-echo "make >> elements_make.log"
-make >> element_make.log
+echo "make >> $INSTALL_DIR/elements_make.log"
+make >> $INSTALL_DIR/element_make.log
 
-echo "make install >> elements_make_install.log"
-make install >> elements_make_install.log
+echo "make install >> $INSTALL_DIR/elements_make_install.log"
+make install >> $INSTALL_DIR/elements_make_install.log
 which elementsd
 
 echo "**************"
@@ -143,11 +143,11 @@ echo "echo \"ALICE_MINER_ADDRESS = \$ALICE_MINER_ADDRESS\"" >> $PROJECT_CONF
 
 su $PROJECT_USER -c ALICE_RECEIVER_ADDRESS=$(alice-cli getnewaddress)
 echo "ALICE_RECEIVER_ADDRESS=$ALICE_RECEIVER_ADDRESS" >> $PROJECT_CONF
-echo "echo \echo "ALICE_RECEIVER_ADDRESS = \$ALICE_RECEIVER_ADDRESS\"" >> $PROJECT_CONF
+echo "echo \"ALICE_RECEIVER_ADDRESS = \$ALICE_RECEIVER_ADDRESS\"" >> $PROJECT_CONF
 
 su $PROJECT_USER -c BOB_RECEIVER_ADDRESS=$(bob-cli getnewaddress)
 echo "BOB_RECEIVER_ADDRESS=$BOB_RECEIVER_ADDRESS" >> $PROJECT_CONF
-echo "echo \echo "BOB_RECEIVER_ADDRESS = \$BOB_RECEIVER_ADDRESS\"" >> $PROJECT_CONF
+echo "echo \"BOB_RECEIVER_ADDRESS = \$BOB_RECEIVER_ADDRESS\"" >> $PROJECT_CONF
 
 echo "ALICE_MINER_ADDRESS = $ALICE_MINER_ADDRESS"
 echo "ALICE_RECEIVER_ADDRESS = $ALICE_RECEIVER_ADDRESS"
@@ -156,6 +156,6 @@ echo "BOB_RECEIVER_ADDRESS = $BOB_RECEIVER_ADDRESS"
 echo "**************"
 echo "chmod +x"
 echo "**************"
-chmod +x elementsProjectStart.sh
-chmod +x elementsProjectStop.sh
-chmod +x test_transaction_simple.sh
+chmod +x $INSTALL_DIR/elementsProjectStart.sh
+chmod +x $INSTALL_DIR/elementsProjectStop.sh
+chmod +x $INSTALL_DIR/test_transaction_simple.sh
