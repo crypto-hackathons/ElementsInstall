@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Configuration
-export PROJECT_USER="$1"
+export PROJECT_USER=$1
 export INSTALL_DIR=`pwd`
 export PROJECT_CONF=$INSTALL_DIR/elementsProject
 alias userDo="su $PROJECT_USER -c"

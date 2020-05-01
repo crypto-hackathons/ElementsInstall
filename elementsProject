@@ -1,5 +1,10 @@
 # Base dir
-PROJECT_USER="$1"
+PROJECT_USER=$1
+echo "************"
+echo "user"
+echo "************"
+echo "PROJECT_USER = $PROJECT_USER"
+
 export PROJECT_DIR="/opt/project"
 export DB4_INSTALL_PATH="/opt"
 export BDB_PREFIX="/opt/db4"
