@@ -1,122 +1,61 @@
 # Base dir
-
 export PROJECT_DIR="/opt/project"
-
 export DB4_INSTALL_PATH="/opt"
-
 export BDB_PREFIX="/opt/db4"
-
 export PROJECT_ELEMENTS_DIR="$PROJECT_DIR/elements"
 
-
-
 echo "************"
-
 echo "Base dir"
-
 echo "************"
-
 echo "PROJECT_DIR = $PROJECT_DIR"
-
 echo "DB4_INSTALL_PATH = $DB4_INSTALL_PATH"
-
 echo "BDB_PREFIX = $BDB_PREFIX"
-
 echo "PROJECT_ELEMENTS_DIR = $PROJECT_ELEMENTS_DIR"
 
-
-
 # Bitcoin configuration 
-
+export USER_BITCOIN_DIR="$HOME/bitcoindir"
 export PROJECT_BITCOIN_DIR="$PROJECT_DIR/bitcoin"
-
 alias btc="$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest"
-
 alias btcd="$PROJECT_BITCOIN_DIR/src/./bitcoind -regtest"
-
-alias b-dae="btcd -datadir=$BITCOIN_DIR"
-
-
+alias b-dae="btcd -datadir=$USER_BITCOIN_DIR"
 
 echo "************"
-
 echo "Bitcoin configuration"
-
 echo "************"
-
+echo "USER_BITCOIN_DIR = $USER_BITCOIN_DIR"
 echo "PROJECT_BITCOIN_DIR = $PROJECT_BITCOIN_DIR"
-
 echo "btc = $PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest"
-
 echo "btcd = $PROJECT_BITCOIN_DIR/src/./bitcoind -regtest"
-
-echo "btcd = btcd -datadir=$BITCOIN_DIR"
-
-echo "b-dae = btcd -datadir=$BITCOIN_DIR"
-
-
+echo "btcd = btcd -datadir=$USER_BITCOIN_DIR"
+echo "b-dae = btcd -datadir=$USER_BITCOIN_DIR"
 
 # Simplicity configuration
-
 export PROJECT_SIMPLICITY_DIR="$PROJECT_DIR/simplicity"
-
 export PROJECT_HAL_DIR="$PROJECT_DIR/hal"
-
 alias simplicityenv="cd $PROJECT_SIMPLICITY_DIR && nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
 
-
-
 echo "************"
-
 echo "Simplicity configuration
-
 echo "************"
-
 echo "PROJECT_SIMPLICITY_DIR = $PROJECT_SIMPLICITY_DIR"
-
 echo "PROJECT_HAL_DIR = $PROJECT_HAL_DIR"
-
 echo "simplicityenv = cd $PROJECT_SIMPLICITY_DIR && nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
 
-
-
 # personas configuration
-
-export USER_BITCOIN_DIR="$HOME/bitcoindir"
-
 export USER_ALICE_DIR="$HOME/alice"
-
 export USER_BOB_DIR="$HOME/bob"
-
-alias b-cli="btc -datadir=$BITCOIN_DIR"
-
+alias b-cli="btc -datadir=$USER_BITCOIN_DIR"
 alias alice-dae="elementsd -datadir=$USER_ALICE_DIR"
-
 alias alice-cli="elements-cli -datadir=$USER_ALICE_DIR"
-
 alias bob-dae="elementsd -datadir=$USER_BOB_DIR"
-
 alias bob-cli="elements-cli -datadir=$USER_BOB_DIR"
 
-
-
 echo "************"
-
-echo "Simplicity configuration
-
+echo "Personas configuration
 echo "************"
-
-echo "USER_BITCOIN_DIR = $USER_BITCOIN_DIR"
-
 echo "USER_ALICE_DIR = $USER_ALICE_DIR"
-
 echo "USER_BOB_DIR = $USER_BOB_DIR"
-
-echo "b-cli = btc -datadir=$BITCOIN_DIR"
-
+echo "b-cli = btc -datadir=$USER_BITCOIN_DIR"
 echo "alice-dae = elementsd -datadir=$USER_ALICE_DIR"
-
 echo "bob-dae = elementsd -datadir=$USER_BOB_DIR"
-
 echo "bob-cli = elements-cli -datadir=$USER_BOB_DIR"
-
