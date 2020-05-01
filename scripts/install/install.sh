@@ -1,5 +1,6 @@
 #!/bin/bash
-source $PROJECT_CONF $1
+
+source ../../conf/elementsProject.conf $1
 mkdir $PROJECT_DIR
 chmod 0755 $PROJECT_DIR && chown $PROJECT_USER $PROJECT_DIR
 
