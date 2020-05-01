@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./elementsProjectStart.sh
+./elementsProjectStart.sh $1
 
 echo "Alice wallet"
 alice-cli getwalletinfo
