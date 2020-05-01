@@ -14,7 +14,7 @@ In superuser: wget https://github.com/crypto-hackathons/ElementsInstall/blob/mas
 
 Or
 
-Copy files and Type in superuser: cd scripts && chmod +x .install.sh && ./install.sh $USER
+Copy files and Type in superuser: cd scripts && chmod +x install.sh && ./install.sh $USER
 
 ## Start:
 
