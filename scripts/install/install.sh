@@ -6,7 +6,6 @@ export INSTALL_DIR=`pwd`
 export INSTALL_LOG_DIR="$INSTALL_DIR/../../log/install"
 export INSTALL_TEST_DIR="$INSTALL_DIR/../../test"
 export PROJECT_CONF="$INSTALL_DIR/../../conf/elementsProject.conf"
-alias userDo="su $PROJECT_USER -c"
 
 echo "**************"
 echo "Params"
@@ -14,8 +13,8 @@ echo "**************"
 echo "PROJECT_USER = $PROJECT_USER"
 echo "INSTALL_DIR = $INSTALL_DIR"
 echo "INSTALL_LOG_DIR = $INSTALL_LOG_DIR"
+echo "INSTALL_TEST_DIR = $INSTALL_TEST_DIR"
 echo "PROJECT_CONF = $PROJECT_CONF"
-echo "userDo = su $PROJECT_USER -c"
 
 source $PROJECT_CONF $PROJECT_USER
 mkdir $PROJECT_DIR
@@ -42,7 +41,7 @@ echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
 echo "git clone https://github.com/ElementsProject/elements.git"
 git clone https://github.com/ElementsProject/elements.git
-echo "chmod 0755 $PROJECT_ELEMENTS_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR" 
+echo "chmod 0755 $PROJECT_ELEMENTS_DIR && chown $PROJECT_USER $PROJECT_ELEMENTS_DIR" 
 chmod 0755 $PROJECT_ELEMENTS_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
 echo "cd $PROJECT_ELEMENTS_DIR"
 cd $PROJECT_ELEMENTS_DIR
@@ -61,9 +60,13 @@ echo "chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DI
 chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
 echo "cd $PROJECT_BITCOIN_DIR"
 cd $PROJECT_BITCOIN_DIR
+echo "git checkout simplicity"
 git checkout simplicity
+echo "PROJECT_USER = $PROJECT_USER"
+echo "alias userDo = su $PROJECT_USER -c"
+alias userDo="su $PROJECT_USER -c"
+echo "userDo ./autogen.sh"
 userDo ./autogen.sh
-
 echo "userDo ./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/bitcoin_configure.log"
 userDo ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/bitcoin_configure.log
  
@@ -89,7 +92,7 @@ cd $PROJECT_DIR
 echo "git clone https://github.com/ElementsProject/simplicity.git"
 git clone https://github.com/ElementsProject/simplicity.git
 echo "chmod 0755 $PROJECT_SIMPLICITY_DIR && chown $PROJECT_USER $PROJECT_SIMPLICITY"
-chmod 0755 $PROJECT_SIMPLICITY_DIR && chown $PROJECT_USER $PROJECT_SIMPLICITY
+chmod 0755 $PROJECT_SIMPLICITY_DIR && chown $PROJECT_USER $PROJECT_SIMPLICITY_DIR
 userDo cabal update
 userDo cabal install bech32-1.0.2
 userDo cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie
