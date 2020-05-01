@@ -23,10 +23,8 @@ echo "Berkeley DB"
 echo "**************"
 echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
-echo "git clone https://github.com/ElementsProject/elements.git"
-git clone https://github.com/ElementsProject/elements.git
-echo "chmod 0755 $PROJECT_ELEMENTS_DIR && chown $PROJECT_USER $PROJECT_ELEMENTS_DIR" 
-chmod 0755 $PROJECT_ELEMENTS_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
+echo "userDo git clone https://github.com/ElementsProject/elements.git"
+userDo git clone https://github.com/ElementsProject/elements.git
 echo "cd $PROJECT_ELEMENTS_DIR"
 cd $PROJECT_ELEMENTS_DIR
 
@@ -38,17 +36,20 @@ echo "Bitcoin"
 echo "**************"
 echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
-echo "git clone https://github.com/roconnor-blockstream/bitcoin.git"
-git clone https://github.com/roconnor-blockstream/bitcoin.git
-echo "chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR"
-chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
+echo "userDo git clone https://github.com/roconnor-blockstream/bitcoin.git"
+userDo git clone https://github.com/roconnor-blockstream/bitcoin.git
 echo "cd $PROJECT_BITCOIN_DIR"
 cd $PROJECT_BITCOIN_DIR
-echo "git checkout simplicity"
-git checkout simplicity
-echo "PROJECT_USER = $PROJECT_USER"
-echo "userDo ./autogen.sh"
-userDo ./autogen.sh
+echo "userDo git checkout simplicity"
+userDo git checkout simplicity
+echo "chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR"
+chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
+echo "chmod 0755 $PROJECT_BITCOIN_DIR/* -R && chown $PROJECT_USER $PROJECT_BITCOIN_DIR/* -R"
+chmod 0755 $PROJECT_BITCOIN_DIR/* -R && chown $PROJECT_USER $PROJECT_BITCOIN_DIR/* -R
+# echo "userDo ./autogen.sh >>  $INSTALL_LOG_DIR/bitcoin_autogen.log" 
+# userDo ./autogen.sh  >>  $INSTALL_LOG_DIR/bitcoin_autogen.log
+echo "./autogen.sh >>  $INSTALL_LOG_DIR/bitcoin_autogen.log" 
+./autogen.sh >>  $INSTALL_LOG_DIR/bitcoin_autogen.log
 echo "userDo ./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/bitcoin_configure.log"
 userDo ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/bitcoin_configure.log
  
@@ -71,17 +72,18 @@ echo "Simplicity"
 echo "**************"
 echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
-echo "git clone https://github.com/ElementsProject/simplicity.git"
-git clone https://github.com/ElementsProject/simplicity.git
-echo "chmod 0755 $PROJECT_SIMPLICITY_DIR && chown $PROJECT_USER $PROJECT_SIMPLICITY"
-chmod 0755 $PROJECT_SIMPLICITY_DIR && chown $PROJECT_USER $PROJECT_SIMPLICITY_DIR
-userDo cabal update
-userDo cabal install bech32-1.0.2
-userDo cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie
+echo "userDo git clone https://github.com/ElementsProject/simplicity.git"
+userDo git clone https://github.com/ElementsProject/simplicity.git
+echo "userDo cabal update >> $INSTALL_LOG_DIR/simplicity_cabal_update.log"
+userDo cabal update >> $INSTALL_LOG_DIR/simplicity_cabal_update
+echo "userDo cabal install bech32-1.0.2 >> $INSTALL_LOG_DIR/simplicity_cabal_bech32.log"
+userDo cabal install bech32-1.0.2 >> $INSTALL_LOG_DIR/simplicity_cabal_bech32.log
+echo "userDo cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie >> $INSTALL_LOG_DIR/simplicity_cabal_install.log"
+userDo cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie >> $INSTALL_LOG_DIR/simplicity_cabal_install.log
 echo "cd $PROJECT_SIMPLICITY_DIR"
 cd $PROJECT_SIMPLICITY_DIR
-echo "git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4"
-git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4
+echo "userDo git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4"
+userDo git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4
 echo "userDo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
 userDo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 echo "userDo source $HOME/.cargo/env"
@@ -92,8 +94,8 @@ echo "chmod 0755 $PROJECT_HAL_DIR && chown $PROJECT_USER $PROJECT_HAL_DIR"
 chmod 0755 $PROJECT_HAL_DIR && chown $PROJECT_USER $PROJECT_HAL_DIR
 echo "cd $PROJECT_HAL_DIR"
 cd $PROJECT_HAL_DIR
-echo "wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz"
-wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz
+echo "userDo wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz"
+userDo wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz
 userDo tar xzf hal-0.6.1-vendored.tar.gz
 userDo cargo install hal
 echo "mkdir -m 0755 /nix && chown $PROJECT_USER /nix"
