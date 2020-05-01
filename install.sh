@@ -14,6 +14,7 @@ echo "INSTALL_DIR = $INSTALL_DIR"
 echo "PROJECT_CONF = $PROJECT_CONF"
 
 source $PROJECT_CONF
+mkdir $PROJECT_DIR
 chmod 0755 $PROJECT_DIR && chown $PROJECT_USER $PROJECT_DIR
 
 echo "**************"
