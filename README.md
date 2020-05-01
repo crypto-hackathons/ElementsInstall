@@ -1,16 +1,18 @@
 # Elements Project Environnement
 
- ## Configure : elementsProject
+ ## Configure:
 
-Your configuration
+Your configuration in the elementsProject file.
 
-elementsProjectStart.sh# Install : install.sh
+## Install:
 
-## The install script, type in superuser:
+Type in superuser:
 
 chmod +x install.sh && ./install.sh $USER
 
-## Run : elementsProjectStart.sh, type :
+## Run:
+
+Type:
 
 ./elementsProjectStart.sh $USER
 
