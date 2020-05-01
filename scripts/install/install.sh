@@ -15,7 +15,7 @@ apt-get upgrade >> $INSTALL_LOG_DIR/apt_upgrade.log
 echo "apt-get install git apt-utils build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make >> $INSTALL_LOG_DIR/apt.log"
 apt-get install git build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make >> $INSTALL_LOG_DIR/apt.log
 
-echo "apt-get update --fix-missing >> $INSTALL_LOG_DIR/apt_missing.lo"
+echo "apt-get update --fix-missing >> $INSTALL_LOG_DIR/apt_missing.log"
 apt-get update --fix-missing >> $INSTALL_LOG_DIR/apt_missing.log
 
 echo "**************"
