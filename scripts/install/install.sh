@@ -23,7 +23,7 @@ echo "Berkeley DB"
 echo "**************"
 echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
-echo "userDo \"git clpone https://github.com/ElementsProject/elements.git\""
+echo "userDo \"git clone https://github.com/ElementsProject/elements.git\""
 userDo "git clone https://github.com/ElementsProject/elements.git"
 echo "cd $PROJECT_ELEMENTS_DIR"
 cd $PROJECT_ELEMENTS_DIR
@@ -42,10 +42,6 @@ echo "cd $PROJECT_BITCOIN_DIR"
 cd $PROJECT_BITCOIN_DIR
 echo "userDo \"git checkout simplicity\""
 userDo "git checkout simplicity"
-echo "chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR"
-chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
-echo "chmod 0755 $PROJECT_BITCOIN_DIR/* -R && chown $PROJECT_USER $PROJECT_BITCOIN_DIR/* -R"
-chmod 0755 $PROJECT_BITCOIN_DIR/* -R && chown $PROJECT_USER $PROJECT_BITCOIN_DIR/* -R
 # echo "userDo ./autogen.sh >>  $INSTALL_LOG_DIR/bitcoin_autogen.log" 
 # userDo ./autogen.sh  >>  $INSTALL_LOG_DIR/bitcoin_autogen.log
 echo "./autogen.sh >>  $INSTALL_LOG_DIR/bitcoin_autogen.log" 
