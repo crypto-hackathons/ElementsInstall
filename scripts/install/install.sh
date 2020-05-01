@@ -23,8 +23,8 @@ echo "Berkeley DB"
 echo "**************"
 echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
-echo "userDo git clone https://github.com/ElementsProject/elements.git"
-userDo git clone https://github.com/ElementsProject/elements.git
+echo "userDo \"git clpone https://github.com/ElementsProject/elements.git\""
+userDo "git clone https://github.com/ElementsProject/elements.git"
 echo "cd $PROJECT_ELEMENTS_DIR"
 cd $PROJECT_ELEMENTS_DIR
 
@@ -36,12 +36,12 @@ echo "Bitcoin"
 echo "**************"
 echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
-echo "userDo git clone https://github.com/roconnor-blockstream/bitcoin.git"
-userDo git clone https://github.com/roconnor-blockstream/bitcoin.git
+echo "userDo \"git clone https://github.com/roconnor-blockstream/bitcoin.git\""
+userDo "git clone https://github.com/roconnor-blockstream/bitcoin.git"
 echo "cd $PROJECT_BITCOIN_DIR"
 cd $PROJECT_BITCOIN_DIR
-echo "userDo git checkout simplicity"
-userDo git checkout simplicity
+echo "userDo \"git checkout simplicity\""
+userDo "git checkout simplicity"
 echo "chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR"
 chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
 echo "chmod 0755 $PROJECT_BITCOIN_DIR/* -R && chown $PROJECT_USER $PROJECT_BITCOIN_DIR/* -R"
@@ -72,8 +72,8 @@ echo "Simplicity"
 echo "**************"
 echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
-echo "userDo git clone https://github.com/ElementsProject/simplicity.git"
-userDo git clone https://github.com/ElementsProject/simplicity.git
+echo "userDo \"git clone https://github.com/ElementsProject/simplicity.git\""
+userDo "git clone https://github.com/ElementsProject/simplicity.git"
 echo "userDo cabal update >> $INSTALL_LOG_DIR/simplicity_cabal_update.log"
 userDo cabal update >> $INSTALL_LOG_DIR/simplicity_cabal_update
 echo "userDo cabal install bech32-1.0.2 >> $INSTALL_LOG_DIR/simplicity_cabal_bech32.log"
@@ -82,8 +82,8 @@ echo "userDo cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie 
 userDo cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie >> $INSTALL_LOG_DIR/simplicity_cabal_install.log
 echo "cd $PROJECT_SIMPLICITY_DIR"
 cd $PROJECT_SIMPLICITY_DIR
-echo "userDo git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4"
-userDo git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4
+echo "userDo \"git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4\""
+userDo "git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4"
 echo "userDo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
 userDo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 echo "userDo source $HOME/.cargo/env"
@@ -108,9 +108,6 @@ echo "cd $PROJECT_SIMPLICITY_DIR"
 cd $PROJECT_SIMPLICITY_DIR
 echo "userDo nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\"" 
 userDo nix-shell -p "(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])"
-
-alias simplicityenv="cd $PROJECT_SIMPLICITY_DIR && nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
-echo "simplicityenv = cd $PROJECT_SIMPLICITY_DIR && nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
 
 echo "**************"
 echo "Elements"
