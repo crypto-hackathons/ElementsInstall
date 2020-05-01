@@ -42,8 +42,8 @@ echo "PROJECT_HAL_DIR = $PROJECT_HAL_DIR"
 echo "simplicityenv = cd $PROJECT_SIMPLICITY_DIR && nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
 
 # personas configuration
-export USER_ALICE_DIR="$HOME/alice"
-export USER_BOB_DIR="$HOME/bob"
+export USER_ALICE_DIR="/home/$PROJECT_USER/alice"
+export USER_BOB_DIR="/home/$PROJECT_USER/bob"
 alias b-cli="btc -datadir=$USER_BITCOIN_DIR"
 alias alice-dae="elementsd -datadir=$USER_ALICE_DIR"
 alias alice-cli="elements-cli -datadir=$USER_ALICE_DIR"
