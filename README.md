@@ -20,3 +20,6 @@ Type:
 
 ./elementsProjectStart.sh $USER
 
+## Test:
+
+./test_transaction_simple.sh $USER
