@@ -1,22 +1,5 @@
 #!/bin/bash
-
-# Configuration
-export PROJECT_USER=$1
-export INSTALL_DIR=`pwd`
-export INSTALL_LOG_DIR="$INSTALL_DIR/../../log/install"
-export INSTALL_TEST_DIR="$INSTALL_DIR/../../test"
-export PROJECT_CONF="$INSTALL_DIR/../../conf/elementsProject.conf"
-
-echo "**************"
-echo "Params"
-echo "**************"
-echo "PROJECT_USER = $PROJECT_USER"
-echo "INSTALL_DIR = $INSTALL_DIR"
-echo "INSTALL_LOG_DIR = $INSTALL_LOG_DIR"
-echo "INSTALL_TEST_DIR = $INSTALL_TEST_DIR"
-echo "PROJECT_CONF = $PROJECT_CONF"
-
-source $PROJECT_CONF $PROJECT_USER
+source $PROJECT_CONF $1
 mkdir $PROJECT_DIR
 chmod 0755 $PROJECT_DIR && chown $PROJECT_USER $PROJECT_DIR
 
@@ -63,8 +46,6 @@ cd $PROJECT_BITCOIN_DIR
 echo "git checkout simplicity"
 git checkout simplicity
 echo "PROJECT_USER = $PROJECT_USER"
-echo "alias userDo = su $PROJECT_USER -c"
-alias userDo="su $PROJECT_USER -c"
 echo "userDo ./autogen.sh"
 userDo ./autogen.sh
 echo "userDo ./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/bitcoin_configure.log"
