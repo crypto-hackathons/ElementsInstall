@@ -14,6 +14,7 @@ echo "INSTALL_DIR = $INSTALL_DIR"
 echo "PROJECT_CONF = $PROJECT_CONF"
 
 source $PROJECT_CONF
+chmod 0755 $PROJECT_DIR && chown $PROJECT_USER $PROJECT_DIR
 
 echo "**************"
 echo "Apt install"
@@ -27,7 +28,7 @@ echo "Berkeley DB"
 echo "**************"
 cd $PROJECT_DIR
 git clone https://github.com/ElementsProject/elements.git
-chmod 0755 $PROJECT_ELEMENTS_DIR && chown PROJECT_USER $PROJECT_BITCOIN_DIR
+chmod 0755 $PROJECT_ELEMENTS_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
 cd $PROJECT_ELEMENTS_DIR
 ./contrib/install_db4.sh $DB4_INSTALL_PATH
 
@@ -36,7 +37,7 @@ echo "Bitcoin"
 echo "**************"
 cd $PROJECT_DIR
 git clone https://github.com/roconnor-blockstream/bitcoin.git
-chmod 0755 $PROJECT_BITCOIN_DIR && chown PROJECT_USER $PROJECT_BITCOIN_DIR
+chmod 0755 $PROJECT_BITCOIN_DIR && chown $PROJECT_USER $PROJECT_BITCOIN_DIR
 cd $PROJECT_BITCOIN_DIR
 git checkout simplicity
 ./autogen.sh
@@ -57,7 +58,7 @@ echo "Simplicity"
 echo "**************"
 cd $PROJECT_DIR
 git clone https://github.com/ElementsProject/simplicity.git
-chmod 0755 $PROJECT_SIMPLICITY_DIR && chown PROJECT_USER $PROJECT_SIMPLICITY
+chmod 0755 $PROJECT_SIMPLICITY_DIR && chown $PROJECT_USER $PROJECT_SIMPLICITY
 cabal update
 cabal install bech32-1.0.2
 cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie
@@ -66,7 +67,7 @@ git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 source $HOME/.cargo/env
 mkdir $PROJECT_HAL_DIR
-chmod 0755 $PROJECT_HAL_DIR && chown PROJECT_USER $PROJECT_HAL_DIR
+chmod 0755 $PROJECT_HAL_DIR && chown $PROJECT_USER $PROJECT_HAL_DIR
 cd $PROJECT_HAL_DIR
 wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz
 tar xzf hal-0.6.1-vendored.tar.gz
