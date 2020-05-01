@@ -6,20 +6,20 @@ Your machine needs at least 1.5 GB of memory and 12 GB of storage.
 
 ## Configure:
 
-Your configuration in the elementsProject file.
+Your configuration in the conf/elementsProject.conf file.
 
 ## Install:
 
-Type in superuser: chmod +x install.sh && ./install.sh $USER
+Type in superuser: cd scripts && chmod +x .install.sh && ./install.sh $USER
 
 ## Start:
 
-Type: ./elementsProjectStart.sh $USER
+Type: scripts/./elementsProjectStart.sh $USER
 
 ## Stop:
 
-Type: ./elementsProjectStop.sh $USER
+Type: scripts/./elementsProjectStop.sh $USER
 
 ## Test:
 
-Type: ./test_transaction_simple.sh $USER
+Type: test/./test_transaction_simple.sh $USER
