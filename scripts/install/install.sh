@@ -70,20 +70,20 @@ echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
 echo "userDo \"git clone https://github.com/ElementsProject/simplicity.git\""
 userDo "git clone https://github.com/ElementsProject/simplicity.git"
-echo "userDo cabal update >> $INSTALL_LOG_DIR/simplicity_cabal_update.log"
-userDo cabal update >> $INSTALL_LOG_DIR/simplicity_cabal_update
-echo "userDo cabal install bech32-1.0.2 >> $INSTALL_LOG_DIR/simplicity_cabal_bech32.log"
-userDo cabal install bech32-1.0.2 >> $INSTALL_LOG_DIR/simplicity_cabal_bech32.log
-echo "userDo cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie >> $INSTALL_LOG_DIR/simplicity_cabal_install.log"
-userDo cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie >> $INSTALL_LOG_DIR/simplicity_cabal_install.log
+echo "userDo \"cabal update >> $INSTALL_LOG_DIR/simplicity_cabal_update.log\""
+userDo "cabal update >> $INSTALL_LOG_DIR/simplicity_cabal_update"
+echo "userDo \"cabal install bech32-1.0.2 >> $INSTALL_LOG_DIR/simplicity_cabal_bech32.log\""
+userDo "cabal install bech32-1.0.2 >> $INSTALL_LOG_DIR/simplicity_cabal_bech32.log"
+echo "userDo \"cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie >> $INSTALL_LOG_DIR/simplicity_cabal_install.log\""
+userDo "cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie >> $INSTALL_LOG_DIR/simplicity_cabal_install.log"
 echo "cd $PROJECT_SIMPLICITY_DIR"
 cd $PROJECT_SIMPLICITY_DIR
 echo "userDo \"git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4\""
 userDo "git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4"
 echo "userDo \"curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\""
 userDo "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
-echo "userDo source /home/$PROJECT_USER/.cargo/env"
-userDo source /home/$PROJECT_USER/.cargo/env
+echo "userDo \"source /home/$PROJECT_USER/.cargo/env\""
+userDo "source /home/$PROJECT_USER/.cargo/env"
 echo "mkdir $PROJECT_HAL_DIR"
 mkdir $PROJECT_HAL_DIR
 echo "chmod 0755 $PROJECT_HAL_DIR && chown $PROJECT_USER $PROJECT_HAL_DIR"
@@ -92,8 +92,11 @@ echo "cd $PROJECT_HAL_DIR"
 cd $PROJECT_HAL_DIR
 echo "userDo \"wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz\""
 userDo "wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz"
-userDo tar xzf hal-0.6.1-vendored.tar.gz
-userDo cargo install hal
+userDo "tar xzf hal-0.6.1-vendored.tar.gz"
+
+echo "userDo \"cargo install hal  >> $INSTALL_LOG_DIR/hal_install.log\""
+userDo "cargo install hal  >> $INSTALL_LOG_DIR/hal_install.log"
+
 echo "mkdir -m 0755 /nix && chown $PROJECT_USER /nix"
 mkdir -m 0755 /nix && chown $PROJECT_USER /nix
 echo "userDo \"curl https://nixos.org/nix/install | sh\""
@@ -102,8 +105,8 @@ echo "userDo . /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh"
 userDo . /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh
 echo "cd $PROJECT_SIMPLICITY_DIR"
 cd $PROJECT_SIMPLICITY_DIR
-echo "userDo nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\"" 
-userDo nix-shell -p "(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])"
+echo "userDo \"nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\"\"" 
+userDo "nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
 
 echo "**************"
 echo "Elements"
