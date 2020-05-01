@@ -10,11 +10,10 @@ Your configuration in the conf/elementsProject.conf file.
 
 ## Install:
 
-In superuser: wget https://github.com/crypto-hackathons/ElementsInstall/blob/master/scripts/install/get_install.sh | sh
+Ccopy files or
+git clone https://github.com/crypto-hackathons/ElementsInstall.git
 
-Or
-
-Copy files and Type in superuser: cd scripts && chmod +x install.sh && ./install.sh $USER
+And type in superuser: cd ElementsInstall/scripts && chmod +x install.sh && ./install.sh $USER
 
 ## Start:
 
