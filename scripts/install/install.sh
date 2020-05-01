@@ -80,24 +80,24 @@ echo "cd $PROJECT_SIMPLICITY_DIR"
 cd $PROJECT_SIMPLICITY_DIR
 echo "userDo \"git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4\""
 userDo "git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4"
-echo "userDo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
-userDo curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-echo "userDo source $HOME/.cargo/env"
-userDo source $HOME/.cargo/env
+echo "userDo \"curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\""
+userDo "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+echo "userDo source /home/$PROJECT_USER/.cargo/env"
+userDo source /home/$PROJECT_USER/.cargo/env
 echo "mkdir $PROJECT_HAL_DIR"
 mkdir $PROJECT_HAL_DIR
 echo "chmod 0755 $PROJECT_HAL_DIR && chown $PROJECT_USER $PROJECT_HAL_DIR"
 chmod 0755 $PROJECT_HAL_DIR && chown $PROJECT_USER $PROJECT_HAL_DIR
 echo "cd $PROJECT_HAL_DIR"
 cd $PROJECT_HAL_DIR
-echo "userDo wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz"
-userDo wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz
+echo "userDo \"wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz\""
+userDo "wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz"
 userDo tar xzf hal-0.6.1-vendored.tar.gz
 userDo cargo install hal
 echo "mkdir -m 0755 /nix && chown $PROJECT_USER /nix"
 mkdir -m 0755 /nix && chown $PROJECT_USER /nix
-echo "userDo curl https://nixos.org/nix/install | sh"
-userDo curl https://nixos.org/nix/install | sh
+echo "userDo \"curl https://nixos.org/nix/install | sh\""
+userDo "curl https://nixos.org/nix/install | sh"
 echo "userDo . /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh"
 userDo . /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh
 echo "cd $PROJECT_SIMPLICITY_DIR"
