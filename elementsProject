@@ -13,7 +13,7 @@ echo "BDB_PREFIX = $BDB_PREFIX"
 echo "PROJECT_ELEMENTS_DIR = $PROJECT_ELEMENTS_DIR"
 
 # Bitcoin configuration 
-export USER_BITCOIN_DIR="$HOME/bitcoindir"
+export USER_BITCOIN_DIR="$/home/$PROJECT_USER/bitcoindir"
 export PROJECT_BITCOIN_DIR="$PROJECT_DIR/bitcoin"
 alias btc="$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest"
 alias btcd="$PROJECT_BITCOIN_DIR/src/./bitcoind -regtest"
@@ -35,7 +35,7 @@ export PROJECT_HAL_DIR="$PROJECT_DIR/hal"
 alias simplicityenv="cd $PROJECT_SIMPLICITY_DIR && nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
 
 echo "************"
-echo "Simplicity configuration
+echo "Simplicity configuration"
 echo "************"
 echo "PROJECT_SIMPLICITY_DIR = $PROJECT_SIMPLICITY_DIR"
 echo "PROJECT_HAL_DIR = $PROJECT_HAL_DIR"
@@ -51,7 +51,7 @@ alias bob-dae="elementsd -datadir=$USER_BOB_DIR"
 alias bob-cli="elements-cli -datadir=$USER_BOB_DIR"
 
 echo "************"
-echo "Personas configuration
+echo "Personas configuration"
 echo "************"
 echo "USER_ALICE_DIR = $USER_ALICE_DIR"
 echo "USER_BOB_DIR = $USER_BOB_DIR"
