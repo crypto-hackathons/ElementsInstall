@@ -13,7 +13,7 @@ echo "BDB_PREFIX = $BDB_PREFIX"
 echo "PROJECT_ELEMENTS_DIR = $PROJECT_ELEMENTS_DIR"
 
 # Bitcoin configuration 
-export USER_BITCOIN_DIR="$/home/$PROJECT_USER/bitcoindir"
+export USER_BITCOIN_DIR="/home/$PROJECT_USER/bitcoindir"
 export PROJECT_BITCOIN_DIR="$PROJECT_DIR/bitcoin"
 alias btc="$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest"
 alias btcd="$PROJECT_BITCOIN_DIR/src/./bitcoind -regtest"
