@@ -12,11 +12,11 @@ apt-get update >> $INSTALL_LOG_DIR/apt_update.log
 echo "apt-get upgrade >> $INSTALL_LOG_DIR/apt_upgrade.log"
 apt-get upgrade >> $INSTALL_LOG_DIR/apt_upgrade.log
 
-echo "apt-get install git apt-utils build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make >> $INSTALL_LOG_DIR/apt.log"
-apt-get install git build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make >> $INSTALL_LOG_DIR/apt.log
+echo "apt-get install  -y git apt-utils build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make >> $INSTALL_LOG_DIR/apt.log"
+apt-get install -y  git build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make >> $INSTALL_LOG_DIR/apt.log
 
-echo "apt-get update --fix-missing >> $INSTALL_LOG_DIR/apt_missing.log"
-apt-get update --fix-missing >> $INSTALL_LOG_DIR/apt_missing.log
+echo "apt-get update -y  --fix-missing >> $INSTALL_LOG_DIR/apt_missing.log"
+apt-get update -y  --fix-missing >> $INSTALL_LOG_DIR/apt_missing.log
 
 echo "**************"
 echo "Berkeley DB"
@@ -101,8 +101,8 @@ echo "mkdir -m 0755 /nix && chown $PROJECT_USER /nix"
 mkdir -m 0755 /nix && chown $PROJECT_USER /nix
 echo "userDo \"curl https://nixos.org/nix/install | sh\""
 userDo "curl https://nixos.org/nix/install | sh"
-echo "userDo . /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh"
-userDo . /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh
+echo "userDo \". /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh\""
+userDo ". /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh"
 echo "cd $PROJECT_SIMPLICITY_DIR"
 cd $PROJECT_SIMPLICITY_DIR
 echo "userDo \"nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\"\"" 
