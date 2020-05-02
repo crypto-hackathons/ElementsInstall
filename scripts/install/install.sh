@@ -1,6 +1,12 @@
 #!/bin/bash
 
 source ../../conf/elementsProject.conf $1
+
+if [ -d "$PROJECT_DIR" ]
+then
+    echo "$PROJECT_DIR exist, rm"
+    rm -rf $PROJECT_DIR
+fi
 mkdir $PROJECT_DIR
 chmod 0755 $PROJECT_DIR && chown $PROJECT_USER $PROJECT_DIR
 
@@ -23,11 +29,21 @@ echo "Berkeley DB"
 echo "**************"
 echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
+if [ -d "$PROJECT_ELEMENTS_DIR" ]
+then
+    echo "$PROJECT_ELEMENTS_DIR exist, rm"
+    rm -rf $PROJECT_ELEMENTS_DIR
+fi
 echo "userDo \"git clone https://github.com/ElementsProject/elements.git\""
 userDo "git clone https://github.com/ElementsProject/elements.git"
 echo "cd $PROJECT_ELEMENTS_DIR"
 cd $PROJECT_ELEMENTS_DIR
 
+if [ -d "$BDB_PREFIX" ]
+then
+    echo "$BDB_PREFIX exist, rm"
+    rm -rf $BDB_PREFIX
+fi
 echo "./contrib/install_db4.sh $DB4_INSTALL_PATH >> $INSTALL_LOG_DIR/bd4.log"
 ./contrib/install_db4.sh $DB4_INSTALL_PATH >> $INSTALL_LOG_DIR/bd4.log
 
@@ -36,6 +52,12 @@ echo "Bitcoin"
 echo "**************"
 echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
+
+if [ -d "$PROJECT_BITCOIN_DIR" ]
+then
+    echo "$PROJECT_BITCOIN_DIR exist, rm"
+    rm -rf $PROJECT_BITCOIN_DIR
+fi
 echo "userDo \"git clone https://github.com/roconnor-blockstream/bitcoin.git\""
 userDo "git clone https://github.com/roconnor-blockstream/bitcoin.git"
 echo "cd $PROJECT_BITCOIN_DIR"
@@ -68,6 +90,12 @@ echo "Simplicity"
 echo "**************"
 echo "cd $PROJECT_DIR"
 cd $PROJECT_DIR
+
+if [ -d "$PROJECT_SIMPLICITY_DIR" ]
+then
+    echo "$PROJECT_SIMPLICITY_DIR exist, rm"
+    rm -rf $PROJECT_SIMPLICITY_DIR
+fi
 echo "userDo \"git clone https://github.com/ElementsProject/simplicity.git\""
 userDo "git clone https://github.com/ElementsProject/simplicity.git"
 echo "userDo \"cabal update >> $INSTALL_LOG_DIR/simplicity_cabal_update.log\""
@@ -84,6 +112,12 @@ echo "userDo \"curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\""
 userDo "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
 echo "userDo \"source /home/$PROJECT_USER/.cargo/env\""
 userDo "source /home/$PROJECT_USER/.cargo/env"
+
+if [ -d "$PROJECT_HAL_DIR" ]
+then
+    echo "$PROJECT_HAL_DIR exist, rm"
+    rm -rf $PROJECT_HAL_DIR
+fi
 echo "mkdir $PROJECT_HAL_DIR"
 mkdir $PROJECT_HAL_DIR
 echo "chmod 0755 $PROJECT_HAL_DIR && chown $PROJECT_USER $PROJECT_HAL_DIR"
@@ -97,6 +131,11 @@ userDo "tar xzf hal-0.6.1-vendored.tar.gz"
 echo "userDo \"cargo install hal >> $INSTALL_LOG_DIR/hal_install.log\""
 userDo "cargo install hal >> $INSTALL_LOG_DIR/hal_install.log"
 
+if [ -d "/nix" ]
+then
+    echo "/nix exist, rm"
+    rm -rf /nix
+fi
 echo "mkdir -m 0755 /nix && chown $PROJECT_USER /nix"
 mkdir -m 0755 /nix && chown $PROJECT_USER /nix
 echo "userDo \"curl https://nixos.org/nix/install | sh\""
@@ -132,18 +171,33 @@ echo "**************"
 echo "cd $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"
 cd $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial
 
+if [ -d "$USER_BITCOIN_DIR" ]
+then
+    echo "$USER_BITCOIN_DIR exist, rm"
+    rm -rf $USER_BITCOIN_DIR
+fi
 echo "mkdir $USER_BITCOIN_DIR" 
 mkdir $USER_BITCOIN_DIR
 echo "chmod 0755 $USER_BITCOIN_DIR && chown $PROJECT_USER $USER_BITCOIN_DIR"
 chmod 0755 $USER_BITCOIN_DIR && chown $PROJECT_USER $USER_BITCOIN_DIR
 cp ./bitcoin.conf $BITCOIN_DIR/bitcoin.conf
 
+if [ -d "$USER_ALICE_DIR" ]
+then
+    echo "$USER_ALICE_DIR exist, rm"
+    rm -rf $USER_ALICE_DIR
+fi
 echo "mkdir $USER_ALICE_DIR"
 mkdir $USER_ALICE_DIR
 echo "chmod 0755 $USER_ALICE_DIR && chown $PROJECT_USER $USER_ALICE_DIR"
 chmod 0755 $USER_ALICE_DIR && chown $PROJECT_USER $USER_ALICE_DIR
 cp ./elements1.conf $USER_ALICE_DIR/elements.conf
 
+if [ -d "$USER_BOB_DIR" ]
+then
+    echo "$USER_BOB_DIR exist, rm"
+    rm -rf $USER_BOB_DIR
+fi
 echo "mkdir $USER_BOB_DIR"
 mkdir $USER_BOB_DIR
 echo "chmod 0755 $USER_BOB_DIR && chown $PROJECT_USER $USER_BOB_DIR"
