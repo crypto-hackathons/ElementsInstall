@@ -28,7 +28,7 @@ allCd $1 "$PROJECT_ELEMENTS_DIR"
 suDoLog "$PROJECT_ELEMENTS_DIR/contrib/install_db4.sh $DB4_INSTALL_PATH" "db4_install"
 
 echo "**************"
-echo "Bitcoin"
+echo "Bitcoin install"
 echo "**************"
 allCd $1 "$PROJECT_DIR"
 userGitClone $1 "https://github.com/roconnor-blockstream/bitcoin.git" "bitcoin_gitClone" "$PROJECT_BITCOIN_DIR"
@@ -43,7 +43,7 @@ allCd $1 "$PROJECT_BITCOIN_DIR"
 suDo "btcd -daemon"
 
 echo "**************"
-echo "Simplicity"
+echo "Simplicity install"
 echo "**************"
 allCd $1 "$PROJECT_DIR"
 userGitClone $1 "https://github.com/ElementsProject/simplicity.git" "simplicity_gitClone" "$PROJECT_SIMPLICITY_DIR"
@@ -54,7 +54,7 @@ userDoLog $1 "cabal install" "simplicity_cabal_install"
 
 allCd $1 "$PROJECT_SIMPLICITY_DIR"
 
-useDo $1 "git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4"
+userGitChekout $1 "2867955c0c93418f45ffe8ea0a7b1277b785fdc4"
 useDo $1 "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
 
 userDo $1 "source /home/$PROJECT_USER/.cargo/env"
@@ -67,6 +67,9 @@ userWgetTarxzf $1 "https://github.com/stevenroose/hal/releases/download/v0.6.1/h
 
 userDoLog $1 "cargo install hal" "hal_install"
 
+echo "**************"
+echo "Nix install"
+echo "**************"
 userMkdir $1 "$PROJECT_NIX_DIR"
 
 userDo $1 "curl https://nixos.org/nix/install | sh"
@@ -78,21 +81,21 @@ allCd $1 "$PROJECT_SIMPLICITY_DIR"
 userDo $1 "nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
 
 echo "**************"
-echo "Elements"
+echo "Elements install"
 echo "**************"
 
 allCd $1 "$PROJECT_ELEMENTS_DIR"
 
 userDo $1 "$PROJECT_ELEMENTS_DIR./autogen.sh"
 
-userDoLog $1  ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench" "elements_congigure"
+userDoLog $1  "./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench" "elements_congigure"
 
 suDoLog "make" "element_make"
 suDoLog "make install" "elements_make_install"
 suDo "which elementsd"
 
 echo "**************"
-echo "Personas"
+echo "Personas install"
 echo "**************"
 allCd $1 "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"
 
@@ -113,7 +116,7 @@ userDo $1 "alice-dae"
 userDo $1 "bob-dae"
 
 echo "**************"
-echo "Personas address"
+echo "Personas address add to conf"
 echo "**************"
 echo "# ALICE_MINER_ADDRESS=$(alice-cli getnewaddress)"
 ALICE_MINER_ADDRESS=$(alice-cli getnewaddress)
@@ -132,7 +135,7 @@ ALICE_MINER_ADDRESS = $ALICE_MINER_ADDRESS
 echo "ALICE_MINER_ADDRESS=$ALICE_MINER_ADDRESS" >> $PROJECT_CONF
 
 echo "**************"
-echo "chmod +x"
+echo "Activation"
 echo "**************"
 allCd $1 "$INSTALL_DIR"
 chmodx "$INSTALL_DIR/elementsProjectStart.sh"
