@@ -15,7 +15,7 @@ echo "Apt install"
 echo "**************"
 suDoLog "apt-get update -y" "apt_update"
 suDoLog "apt-get upgrade -y" "apt_upgrade"
-suDoLog "apt-get install -y git apt-utils gprof libzmq5-dev build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make  install openjdk-11-jre openjdk-11-jdk doxygen" "apt_install"
+suDoLog "apt-get install -y git apt-utils libzmq5-dev build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make openjdk-11-jre openjdk-11-jdk doxygen" "apt_install"
 suDoLog "apt-get update -y --fix-missing" "apt_missing"
 
 echo "**************"
