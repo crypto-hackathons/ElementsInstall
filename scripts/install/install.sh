@@ -1,161 +1,162 @@
 #!/bin/bash
 
+userDo()
+{
+  echo "$ $2"
+  su $1 -c "$2"
+}
+
+suDo(){
+
+  echo "\# $1"
+  $1
+}
+
+userDoLog()
+{
+  echo "\$ $2 >> $INSTALL_LOG_DIR/$3.log"
+  userDo $1 $2 >> $INSTALL_LOG_DIR/$3.log
+}
+
+suDoLog()
+{
+  echo "# $1 >> $INSTALL_LOG_DIR/$2.log"
+  $1 >> $INSTALL_LOG_DIR/$2.log
+}
+
+userMkdir()
+{
+   if [ -d "$2" ]
+   then
+	    echo "# rm -rf $2"
+	    rm -rf $2
+  fi
+  echo "# mkdir $2"
+  mkdir $2
+  echo "# chmod 0755 $2 && chown $1 $2"
+  chmod 0755 $2 && chown $1 $2
+}
+
+allCd(){
+	echo "# cd $2"
+	cd $2
+	userDo $1 "cd $2"
+}
+
+userGitClone()
+{
+   # su $1 -c "echo `pwd`"
+   if [ -d "$4" ]
+   then
+	    echo "# rm -rf $4"
+	    rm -rf $4
+  fi
+  su $1 -c "git clone $2 >> $INSTALL_LOG_DIR/$3.log"
+}
+
+userWgetTarxzf(){
+	userDo $1 "wget $1"
+	userDo $1 "tar xzf $2"
+}
+
+echo "**************"
+echo "Configure"
+echo "**************"
 source ../../conf/elementsProject.conf $1
 
-if [ -d "$PROJECT_DIR" ]
-then
-    echo "$PROJECT_DIR exist, rm"
-    rm -rf $PROJECT_DIR
-fi
-mkdir $PROJECT_DIR
-chmod 0755 $PROJECT_DIR && chown $PROJECT_USER $PROJECT_DIR
+echo "**************"
+echo "Directory"
+echo "**************"
+userMkdir $1 $PROJECT_DIR
 
 echo "**************"
 echo "Apt install"
 echo "**************"
-echo "apt-get update -y >> $INSTALL_LOG_DIR/apt_update.log"
-apt-get update -y >> $INSTALL_LOG_DIR/apt_update.log
-echo "apt-get upgrade -y >> $INSTALL_LOG_DIR/apt_upgrade.log"
-apt-get upgrade -y >> $INSTALL_LOG_DIR/apt_upgrade.log
-
-echo "apt-get install -y git apt-utils build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make doxygen libzmq-dev >> $INSTALL_LOG_DIR/apt.log"
-apt-get install -y git build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make doxygen libzmq-dev >> $INSTALL_LOG_DIR/apt.log
-
-echo "apt-get update -y --fix-missing >> $INSTALL_LOG_DIR/apt_missing.log"
-apt-get update -y --fix-missing >> $INSTALL_LOG_DIR/apt_missing.log
+suDoLog "apt-get update -y" "apt_update"
+suDoLog "apt-get upgrade -y" "apt_upgrade"
+suDoLog "apt-get install -y git apt-utils libzmq5-dev build-essential libtool autotools-dev autoconf pkg-config libssl-dev libboost-all-dev libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler imagemagick librsvg2-bin libqrencode-dev autoconf openssl libssl-dev libevent-dev libminiupnpc-dev jq haskell-platform xz-utils autotools-dev automake g++ gpp pkg-config libdb++-dev libboost-all-dev libncurses-dev make doxygen" "apt_install"
+suDoLog "apt-get update -y --fix-missing" "apt_missing"
 
 echo "**************"
-echo "Berkeley DB"
+echo "Berkeley DB install"
 echo "**************"
-echo "cd $PROJECT_DIR"
-cd $PROJECT_DIR
-if [ -d "$PROJECT_ELEMENTS_DIR" ]
-then
-    echo "$PROJECT_ELEMENTS_DIR exist, rm"
-    rm -rf $PROJECT_ELEMENTS_DIR
-fi
-echo "userDo \"git clone https://github.com/ElementsProject/elements.git\""
-userDo "git clone https://github.com/ElementsProject/elements.git"
-echo "cd $PROJECT_ELEMENTS_DIR"
-cd $PROJECT_ELEMENTS_DIR
+userMkdir $1 "$PROJECT_DIR" 
+allCd $1 "$PROJECT_DIR"
+userGitClone $1 "https://github.com/ElementsProject/elements.git" "elements_gitClone" "$PROJECT_ELEMENTS_DIR"
+allCd $1 "$PROJECT_ELEMENTS_DIR"
+sudoLog "$PROJECT_ELEMENTS_DIR/contrib/install_db4.sh $DB4_INSTALL_PATH" "db4_install"
 
-if [ -d "$BDB_PREFIX" ]
-then
-    echo "$BDB_PREFIX exist, rm"
-    rm -rf $BDB_PREFIX
-fi
-echo "./contrib/install_db4.sh $DB4_INSTALL_PATH >> $INSTALL_LOG_DIR/bd4.log"
-./contrib/install_db4.sh $DB4_INSTALL_PATH >> $INSTALL_LOG_DIR/bd4.log
+exit 
 
 echo "**************"
 echo "Bitcoin"
 echo "**************"
-echo "cd $PROJECT_DIR"
-cd $PROJECT_DIR
-
-if [ -d "$PROJECT_BITCOIN_DIR" ]
-then
-    echo "$PROJECT_BITCOIN_DIR exist, rm"
-    rm -rf $PROJECT_BITCOIN_DIR
-fi
-echo "userDo \"git clone https://github.com/roconnor-blockstream/bitcoin.git\""
-userDo "git clone https://github.com/roconnor-blockstream/bitcoin.git"
-echo "cd $PROJECT_BITCOIN_DIR"
-cd $PROJECT_BITCOIN_DIR
-echo "userDo \"git checkout simplicity\""
-userDo "git checkout simplicity"
-# echo "userDo ./autogen.sh >> $INSTALL_LOG_DIR/bitcoin_autogen.log" 
-# userDo ./autogen.sh >> $INSTALL_LOG_DIR/bitcoin_autogen.log
-echo "./autogen.sh >> $INSTALL_LOG_DIR/bitcoin_autogen.log" 
-./autogen.sh >> $INSTALL_LOG_DIR/bitcoin_autogen.log
-echo "userDo \"./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/bitcoin_configure.log\""
-userDo "./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/bitcoin_configure.log"
- 
-echo "make >> $INSTALL_LOG_DIR/bitcoin_make.log" 
-make >> $INSTALL_LOG_DIR/bitcoin_make.log
-
-echo "cd $PROJECT_BITCOIN_DIR"
-cd $PROJECT_BITCOIN_DIR
-
-alias btc="$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest"
-echo "btc = $PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest"
-
-alias btcd="$PROJECT_BITCOIN_DIR/src/./bitcoind -regtest"
-echo "btcd = $PROJECT_BITCOIN_DIR/src/./bitcoind -regtest"
-
-btcd -daemon
+allCd $1 "$PROJECT_DIR"
+userGitClone $1 "https://github.com/roconnor-blockstream/bitcoin.git" "bitcoin_gitClone" "$PROJECT_BITCOIN_DIR"
+allCd $1 "$PROJECT_BITCOIN_DIR"
+suDo "git checkout simplicity"
+userdoLog "./autogen.sh" "bitcoin_autogen" 
+userDoLog $1 "./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench" "bitcoin_configure"
+suDo "make" "bitcoin_make"
+allCd $1 "$PROJECT_BITCOIN_DIR"
+suDo "btcd -daemon"
 
 echo "**************"
 echo "Simplicity"
 echo "**************"
-echo "cd $PROJECT_DIR"
-cd $PROJECT_DIR
+allCd $1 "$PROJECT_DIR"
+userGitClone $1 "https://github.com/ElementsProject/simplicity.git" "simplicity_gitClone" "$PROJECT_SIMPLICITY_DIR"
+userDoLog $1 "cabal update" "simplicity_cabal_update"
 
-if [ -d "$PROJECT_SIMPLICITY_DIR" ]
-then
-    echo "$PROJECT_SIMPLICITY_DIR exist, rm"
-    rm -rf $PROJECT_SIMPLICITY_DIR
-fi
-echo "userDo \"git clone https://github.com/ElementsProject/simplicity.git\""
-userDo "git clone https://github.com/ElementsProject/simplicity.git"
-echo "userDo \"cabal update >> $INSTALL_LOG_DIR/simplicity_cabal_update.log\""
-userDo "cabal update >> $INSTALL_LOG_DIR/simplicity_cabal_update"
-echo "userDo \"cabal install bech32-1.0.2 >> $INSTALL_LOG_DIR/simplicity_cabal_bech32.log\""
-userDo "cabal install bech32-1.0.2 >> $INSTALL_LOG_DIR/simplicity_cabal_bech32.log"
-echo "userDo \"cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie >> $INSTALL_LOG_DIR/simplicity_cabal_install.log\""
-userDo "cabal install unification-fd cereal lens-family-2.0.0 SHA MemoTrie >> $INSTALL_LOG_DIR/simplicity_cabal_install.log"
-echo "cd $PROJECT_SIMPLICITY_DIR"
-cd $PROJECT_SIMPLICITY_DIR
-echo "userDo \"git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4\""
-userDo "git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4"
-echo "userDo \"curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh\""
-userDo "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
-echo "userDo \"source /home/$PROJECT_USER/.cargo/env\""
-userDo "source /home/$PROJECT_USER/.cargo/env"
+userDoLog $1 "cabal install bech32-1.0.2 unification-fd cereal lens-family-2.0.0 SHA MemoTrie" "simplicity_cabal_install_lib"
+userDoLog $1 "cabal install" "simplicity_cabal_install"
 
-if [ -d "$PROJECT_HAL_DIR" ]
-then
-    echo "$PROJECT_HAL_DIR exist, rm"
-    rm -rf $PROJECT_HAL_DIR
-fi
-echo "mkdir $PROJECT_HAL_DIR"
-mkdir $PROJECT_HAL_DIR
-echo "chmod 0755 $PROJECT_HAL_DIR && chown $PROJECT_USER $PROJECT_HAL_DIR"
-chmod 0755 $PROJECT_HAL_DIR && chown $PROJECT_USER $PROJECT_HAL_DIR
-echo "cd $PROJECT_HAL_DIR"
-cd $PROJECT_HAL_DIR
-echo "userDo \"wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz\""
-userDo "wget https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz"
-userDo "tar xzf hal-0.6.1-vendored.tar.gz"
+allCd $1 "$PROJECT_SIMPLICITY_DIR"
 
-echo "userDo \"cargo install hal >> $INSTALL_LOG_DIR/hal_install.log\""
-userDo "cargo install hal >> $INSTALL_LOG_DIR/hal_install.log"
+useDo $1 "git checkout 2867955c0c93418f45ffe8ea0a7b1277b785fdc4"
+useDo $1 "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+
+userDo $1 "source /home/$PROJECT_USER/.cargo/env"
+
+userMkdir "$PROJECT_HAL_DIR"
+
+allCd $1 "$PROJECT_HAL_DIR"
+
+userWgetTarxzf $1 "https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz" "hal-0.6.1-vendored.tar.gz"
+
+userDoLog $1 "cargo install hal" "hal_install"
 
 if [ -d "/nix" ]
 then
     echo "/nix exist, rm"
     rm -rf /nix
 fi
+
 echo "mkdir -m 0755 /nix && chown $PROJECT_USER /nix"
 mkdir -m 0755 /nix && chown $PROJECT_USER /nix
+
 echo "userDo \"curl https://nixos.org/nix/install | sh\""
 userDo "curl https://nixos.org/nix/install | sh"
+
 echo "userDo \". /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh\""
 userDo ". /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh"
+
 echo "cd $PROJECT_SIMPLICITY_DIR"
 cd $PROJECT_SIMPLICITY_DIR
-echo "userDo \"nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\"\"" 
+
+echo "userDo \"nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\"" 
 userDo "nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
 
 echo "**************"
 echo "Elements"
 echo "**************"
+
 echo "cd $PROJECT_ELEMENTS_DIR"
 cd $PROJECT_ELEMENTS_DIR
+
 echo "userDo ./autogen.sh" 
 userDo ./autogen.sh
 
-echo "userDo ./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/elements_congigure.log"
 userDo ./configure BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench >> $INSTALL_LOG_DIR/elements_congigure.log
 
 echo "make >> $INSTALL_LOG_DIR/elements_make.log"
@@ -217,17 +218,17 @@ echo "**************"
 echo "userDo ALICE_MINER_ADDRESS=$(alice-cli getnewaddress)"
 userDo ALICE_MINER_ADDRESS=$(alice-cli getnewaddress)
 echo "ALICE_MINER_ADDRESS=$ALICE_MINER_ADDRESS" >> $PROJECT_CONF
-echo "echo \"ALICE_MINER_ADDRESS = \$ALICE_MINER_ADDRESS\"" >> $PROJECT_CONF
+echo "echo \"ALICE_MINER_ADDRESS = \"$ALICE_MINER_ADDRESS\"" >> $PROJECT_CONF
 
 echo "userDo ALICE_RECEIVER_ADDRESS=$(alice-cli getnewaddress)" 
 userDo ALICE_RECEIVER_ADDRESS=$(alice-cli getnewaddress)
 echo "ALICE_RECEIVER_ADDRESS=$ALICE_RECEIVER_ADDRESS" >> $PROJECT_CONF
-echo "echo \"ALICE_RECEIVER_ADDRESS = \$ALICE_RECEIVER_ADDRESS\"" >> $PROJECT_CONF
+echo "echo \"ALICE_RECEIVER_ADDRESS = \"$ALICE_RECEIVER_ADDRESS\"" >> $PROJECT_CONF
 
 echo "userDo BOB_RECEIVER_ADDRESS=$(bob-cli getnewaddress)"
 userDo BOB_RECEIVER_ADDRESS=$(bob-cli getnewaddress)
 echo "BOB_RECEIVER_ADDRESS=$BOB_RECEIVER_ADDRESS" >> $PROJECT_CONF
-echo "echo \"BOB_RECEIVER_ADDRESS = \$BOB_RECEIVER_ADDRESS\"" >> $PROJECT_CONF
+echo "echo \"BOB_RECEIVER_ADDRESS = \"$BOB_RECEIVER_ADDRESS\"" >> $PROJECT_CONF
 
 echo "ALICE_MINER_ADDRESS = $ALICE_MINER_ADDRESS"
 echo "ALICE_RECEIVER_ADDRESS = $ALICE_RECEIVER_ADDRESS"
