@@ -1,64 +1,5 @@
 #!/bin/bash
 
-userDo()
-{
-  echo "$ $2"
-  su $1 -c "$2"
-}
-
-suDo(){
-
-  echo "\# $1"
-  $1
-}
-
-userDoLog()
-{
-  echo "\$ $2 >> $INSTALL_LOG_DIR/$3.log"
-  userDo $1 $2 >> $INSTALL_LOG_DIR/$3.log
-}
-
-suDoLog()
-{
-  echo "# $1 >> $INSTALL_LOG_DIR/$2.log"
-  $1 >> $INSTALL_LOG_DIR/$2.log
-}
-
-userMkdir()
-{
-   if [ -d "$2" ]
-   then
-	    echo "# rm -rf $2"
-	    rm -rf $2
-  fi
-  echo "# mkdir $2"
-  mkdir $2
-  echo "# chmod 0755 $2 && chown $1 $2"
-  chmod 0755 $2 && chown $1 $2
-}
-
-allCd(){
-	echo "# cd $2"
-	cd $2
-	userDo $1 "cd $2"
-}
-
-userGitClone()
-{
-   # su $1 -c "echo `pwd`"
-   if [ -d "$4" ]
-   then
-	    echo "# rm -rf $4"
-	    rm -rf $4
-  fi
-  su $1 -c "git clone $2 >> $INSTALL_LOG_DIR/$3.log"
-}
-
-userWgetTarxzf(){
-	userDo $1 "wget $1"
-	userDo $1 "tar xzf $2"
-}
-
 echo "**************"
 echo "Configure"
 echo "**************"
@@ -84,9 +25,7 @@ userMkdir $1 "$PROJECT_DIR"
 allCd $1 "$PROJECT_DIR"
 userGitClone $1 "https://github.com/ElementsProject/elements.git" "elements_gitClone" "$PROJECT_ELEMENTS_DIR"
 allCd $1 "$PROJECT_ELEMENTS_DIR"
-sudoLog "$PROJECT_ELEMENTS_DIR/contrib/install_db4.sh $DB4_INSTALL_PATH" "db4_install"
-
-exit 
+suDoLog "$PROJECT_ELEMENTS_DIR/contrib/install_db4.sh $DB4_INSTALL_PATH" "db4_install"
 
 echo "**************"
 echo "Bitcoin"
@@ -94,12 +33,13 @@ echo "**************"
 allCd $1 "$PROJECT_DIR"
 userGitClone $1 "https://github.com/roconnor-blockstream/bitcoin.git" "bitcoin_gitClone" "$PROJECT_BITCOIN_DIR"
 allCd $1 "$PROJECT_BITCOIN_DIR"
-suDo "git checkout simplicity"
-userdoLog "./autogen.sh" "bitcoin_autogen" 
+userGitChekout $1 "simplicity"
+userDoLog $1 "./autogen.sh" "bitcoin_autogen"
 userDoLog $1 "./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench" "bitcoin_configure"
 suDo "make" "bitcoin_make"
 allCd $1 "$PROJECT_BITCOIN_DIR"
 suDo "btcd -daemon"
+exit
 
 echo "**************"
 echo "Simplicity"
