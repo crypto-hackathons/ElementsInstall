@@ -1,7 +1,6 @@
 #!/bin/bash
 
 clear
-source functions.sh
 
 USER=$USER
 APT="yes"
@@ -45,8 +44,10 @@ echo "PERSONAS=$PERSONAS"
 echo "**************"
 echo "Configure"
 echo "**************"
+source functions.sh
 sourceForUser $USER "root"
-sourceForUser $USER $USER
+su $USER -c "source functions.sh && sourceForUser $USER $USER"
+echo "# echo \"run with $USER\""
 
 echo "**************"
 echo "Install"
@@ -78,26 +79,20 @@ if [ "$BERKELEY_DB" == "yes" ]
 		echo "**************"
 		echo "Berkeley DB install"
 		echo "**************"
-		userMkdir $USER "$PROJECT_DIR" 
-		allCd $USER "$PROJECT_DIR"
-		userGitClone $USER "https://github.com/ElementsProject/elements.git" "elements_gitClone" "$PROJECT_ELEMENTS_DIR"
-		allCd $USER "$PROJECT_ELEMENTS_DIR"
-		suDoLog "$PROJECT_ELEMENTS_DIR/contrib/install_db4.sh $DB4_INSTALL_PATH" "db4_install"
+		userMkdir $USER "$PROJECT_DIR"
+		userGitClone $USER "$PROJECT_DIR" "https://github.com/ElementsProject/elements.git" "elements_gitClone" "$PROJECT_ELEMENTS_DIR"
+		suDoLog "$PROJECT_ELEMENTS_DIR" "$PROJECT_ELEMENTS_DIR/contrib/install_db4.sh $DB4_INSTALL_PATH" "db4_install"
 fi
 if [ "$BITCOIN" == "yes" ]
    then 
 		echo "**************"
 		echo "Bitcoin install"
-		echo "**************"
-		allCd $USER "$PROJECT_DIR"
-		userGitClone $USER "https://github.com/roconnor-blockstream/bitcoin.git" "bitcoin_gitClone" "$PROJECT_BITCOIN_DIR"
-		allCd $USER "$PROJECT_BITCOIN_DIR"
-		userGitChekout $USER $PROJECT_BITCOIN_BRANCH
-		userDoLog $USER "$PROJECT_BITCOIN_DIR/./autogen.sh" "bitcoin_autogen"
-		allCd $USER "$PROJECT_BITCOIN_DIR"
-		userDoLog $USER "$BITCOIN_CONFIGURE" "bitcoin_configure"
-		allCd $USER "$PROJECT_BITCOIN_DIR"
-		suDoLog make "bitcoin_make"		
+		echo "**************"		
+		userGitClone $USER "$PROJECT_DIR" "https://github.com/roconnor-blockstream/bitcoin.git" "bitcoin_gitClone" "$PROJECT_BITCOIN_DIR"
+		userGitChekout $USER "$PROJECT_BITCOIN_DIR" $PROJECT_BITCOIN_BRANCH
+		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$PROJECT_BITCOIN_DIR/./autogen.sh" "bitcoin_autogen"
+		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$BITCOIN_CONFIGURE" "bitcoin_configure"
+		suDoLog "$PROJECT_BITCOIN_DIR" make "bitcoin_make"		
 		suDo "nohup btcd -daemon &>/dev/null &"
 fi
 if [ "$SIMPLICITY" == "yes" ]
@@ -105,28 +100,15 @@ if [ "$SIMPLICITY" == "yes" ]
 		echo "**************"
 		echo "Simplicity install"
 		echo "**************"
-		allCd $USER "$PROJECT_DIR"
-		userGitClone $USER "https://github.com/ElementsProject/simplicity.git" "simplicity_gitClone" "$PROJECT_SIMPLICITY_DIR"
-		allCd $USER "$PROJECT_SIMPLICITY_DIR"
-		userGitChekout $USER "$PROJECT_SIMPLICITY_BRANCH"
-		allCd $USER "$PROJECT_DIR"
-		userDoLog $USER "cabal update" "simplicity_cabal_update"		
-		userDoLog $USER "cabal install bech32-1.0.2 unification-fd cereal lens-family-2.0.0 SHA MemoTrie" "simplicity_cabal_install_lib"
-		userDoLog $USER "cabal install" "simplicity_cabal_install"
-		
-		allCd $USER "$PROJECT_SIMPLICITY_DIR"		
-		
-		useDo $USER "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
-		
-		userDo $USER "source /home/$PROJECT_USER/.cargo/env"
-		
-		userMkdir "$PROJECT_HAL_DIR"
-		
-		allCd $USER "$PROJECT_HAL_DIR"
-		
-		userWgetTarxzf $USER "https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz" "hal-0.6.1-vendored.tar.gz"
-		
-		userDoLog $USER "cargo install hal" "hal_install"
+		userGitClone $USER "$PROJECT_DIR" "https://github.com/ElementsProject/simplicity.git" "simplicity_gitClone" "$PROJECT_SIMPLICITY_DIR"
+		userGitChekout $USER "$PROJECT_SIMPLICITY_DIR" "$PROJECT_SIMPLICITY_BRANCH"
+		userDoLog $USER "$PROJECT_DIR" "cabal update" "simplicity_cabal_update"		
+		userDoLog $USER "$PROJECT_DIR" "cabal install bech32-1.0.2 unification-fd cereal lens-family-2.0.0 SHA MemoTrie" "simplicity_cabal_install_lib"
+		useDo $USER "$PROJECT_SIMPLICITY_DIR" "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"		
+		userDo $USER "$PROJECT_SIMPLICITY_DIR" "source /home/$PROJECT_USER/.cargo/env"		
+		userMkdir "$PROJECT_HAL_DIR"		
+		userWgetTarxzf $USER "$PROJECT_HAL_DIR" "https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz" "hal-0.6.1-vendored.tar.gz"
+		userDoLog $USER "$PROJECT_HAL_DIR" "cargo install hal" "hal_install"
 		
 		exit;
 fi
@@ -136,51 +118,37 @@ if [ "$NIX" == "yes" ]
 		echo "**************"
 		echo "Nix install"
 		echo "**************"
-		userMkdir $USER "$PROJECT_NIX_DIR"
-		
-		userDo $USER "curl https://nixos.org/nix/install | sh"
-		
-		userDo $USER ". /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh"
-		
-		allCd $USER "$PROJECT_SIMPLICITY_DIR"
-		
-		userDo $USER "nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
+		userMkdir $USER "$PROJECT_NIX_DIR"		
+		userDo $USER "$PROJECT_DIR" "curl https://nixos.org/nix/install | sh"		
+		userDo $USER "$PROJECT_DIR" ". /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh"		
+		userDo $USER "$PROJECT_SIMPLICITY_DIR" "nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
 fi
 if [ "$ELEMENTS" == "yes" ]
    then
 		echo "**************"
 		echo "Elements install"
-		echo "**************"
-		
-		allCd $USER "$PROJECT_ELEMENTS_DIR"
-		
-		userDo $USER "$PROJECT_ELEMENTS_DIR/./autogen.sh"
-		
-		userDoLog $USER "$PROJECT_ELEMENTS_DIR/./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench" "elements_congigure"
-		
-		suDoLog "make" "element_make"
-		suDoLog "make install" "elements_make_install"
-		suDo "which elementsd"
+		echo "**************"		
+		userDo $USER "$PROJECT_ELEMENTS_DIR" "$PROJECT_ELEMENTS_DIR/./autogen.sh"		
+		userDoLog $USER "$PROJECT_ELEMENTS_DIR" "$PROJECT_ELEMENTS_DIR/./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench" "elements_congigure"
+		suDoLog  "$PROJECT_ELEMENTS_DIR" "make" "element_make"
+		suDoLog  "$PROJECT_ELEMENTS_DIR" "make install" "elements_make_install"
+		suDo  "$PROJECT_ELEMENTS_DIR" "which elementsd"
 fi
 if [ "$PERSONAS" == "yes" ]
    then
 		echo "**************"
 		echo "Personas install"
-		echo "**************"
-		allCd $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"
-		
+		echo "**************"		
 		userMkdir $USER "$USER_BITCOIN_DIR"
-		userDo $USER "cp $USER_BITCOIN_DIR/bitcoin.conf $BITCOIN_DIR/bitcoin.conf"
-		
+		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial" "cp $USER_BITCOIN_DIR/bitcoin.conf $BITCOIN_DIR/bitcoin.conf"
 		userMkdir $USER "$USER_ALICE_DIR"
-		userDo $USER "cp $USER_BITCOIN_DIR/elements1.conf $USER_ALICE_DIR/elements.conf"
-		
+		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $USER_BITCOIN_DIR/elements1.conf $USER_ALICE_DIR/elements.conf"
 		userMkdir $USER "$USER_BOB_DIR"
-		userDo $USER "cp $USER_BITCOIN_DIR/elements2.conf $USER_BOB_DIR/elements.conf"
+		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $USER_BITCOIN_DIR/elements2.conf $USER_BOB_DIR/elements.conf"
 		
-		userDo $USER "b-dae"
-		userDo $USER "alice-dae"
-		userDo $USER "bob-dae"
+		userDo $USER "$PROJECT_DIR" "b-dae"
+		userDo $USER "$PROJECT_DIR" "alice-dae"
+		userDo $USER "$PROJECT_DIR" "bob-dae"
 		
 		echo "# ALICE_MINER_ADDRESS=$(alice-cli getnewaddress)"
 		ALICE_MINER_ADDRESS=$(alice-cli getnewaddress)
@@ -205,6 +173,4 @@ allCd $USER "$INSTALL_DIR"
 chmodx "$INSTALL_DIR/elementsProjectStart.sh"
 chmodx "$INSTALL_DIR/elementsProjectStop.sh"
 chmodx "$INSTALL_DIR/../../test/test_transaction_simple.sh"
-
-allCd $USER "$INSTALL_LOG_DIR"
-userDo $USER "ls -al"
+userDo $USER "$INSTALL_LOG_DIR" "ls -al"

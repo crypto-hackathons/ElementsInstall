@@ -1,9 +1,10 @@
 #!/bin/bash
+
 shopt -s expand_aliases
 
 function sourceForUser()
 {	
-	if [ -f "$2" ]
+	if [ -f "../../conf/elementsProject_$1_$2.conf" ]
    then
 	    echo "# rm ../../conf/elementsProject_$1_$2.conf"
 	    rm "../../conf/elementsProject_$1_$2.conf"
@@ -15,42 +16,21 @@ function sourceForUser()
 echoPart(){
 
 	echo "echo \"**************\""
-	echo "echo \"$1\""
+	echo "echo $1"
 	echo "echo \"**************\""
 }
 exportAll()
 {
-	echo "export $3=\"$4\""
-	export $3="$4"
+	echo "export $1=\"$2\""
+	export $1="$2"
 }
 aliasAll()
 {
-	CMD=$4
-  	CMD4="${CMD//[\"]/\\\"}"
+	CMD=$2
+  	CMD2="${CMD//[\"]/\\\"}"
     
-	echo "alias $3=\"$CMD4\""
-	alias $3="$CMD4"
-}
-userDo()
-{
-  echo "$ $2"
-  su $1 -c "$2"
-}
-suDo(){
-
-  echo "# $1"
-  $1
-}
-userDoLog()
-{
-
-  echo "$ $2 >> $INSTALL_LOG_DIR/$3.log"
-  su $1 -c "$2" >> $INSTALL_LOG_DIR/$3.log
-}
-suDoLog()
-{
-  echo "# $1 >> $INSTALL_LOG_DIR/$2.log"
-  $1 >> $INSTALL_LOG_DIR/$2.log
+	echo "alias $1=\"$CMD2\""
+	alias $1="$CMD2"
 }
 userMkdir()
 {
@@ -64,40 +44,80 @@ userMkdir()
   echo "# chmod 0755 $2 && chown $1 $2"
   chmod 0755 $2 && chown $1 $2
 }
-allCd(){
+userCd()
+{
+  echo "$ cd $2"
+  su $1 -c "cd $2"
+}
+userDo()
+{
+  # userCd $1 $2
 
-	userDo $1 "cd $2"
+  echo "# cd $2 && $3"
+  su $1 -c "cd $2 && $3"
+}
+suCd()
+{
+  echo "# $1"
+  cd $1
+}
+suDo(){
 
-	echo "# cd $2"
-	cd $2	
+  suCd $2
+
+  echo "# $1"
+  $1
+}
+userDoLog()
+{
+  # userCd $1 $2
+
+  echo "$ cd $2 && $3 >> $INSTALL_LOG_DIR/$4.log"
+  su $1 -c "cd $2 && $3" >> $INSTALL_LOG_DIR/$4.log
+}
+suDoLog()
+{
+  suCd $2
+  
+  echo "# $1 >> $INSTALL_LOG_DIR/$3.log"
+  $1 >> $INSTALL_LOG_DIR/$3.log
 }
 userCongigure()
-{  
-  CMD="$2"
-  CMD2="${CMD//[\"]/\\\"}"
+{
+	
+  # userCd $1 $2
+  
+  CMD="$3"
+  CMD3="${CMD//[\"]/\\\"}"
      
-  echo "$ ./configure $2"
-  su $1 -c "./configure $CMD"
+  echo "$ cd $2 && ./configure $3"
+  su $1 -c "cd $2 && ./configure $CMD"
 }
 userGitClone()
 {
-   # su $1 -c "echo `pwd`"
-   if [ -d "$4" ]
-   then
-	    echo "# rm -rf $4"
-	    rm -rf $4
+   # userCd $1 $2
+
+   if [ -d "$5" ]; then
+        echo "# echo \"$5 exist\""
+	    echo "# rm -rf $5"
+	    rm -rf $5
+	 else
+	 	echo "# echo \"$5 not exist\""
   fi
-  echo "$ git clone $2 >> $INSTALL_LOG_DIR/$3.log"
-  su $1 -c "git clone $2 >> $INSTALL_LOG_DIR/$3.log"
+  echo "$ cd $2 && git clone $3 >> $INSTALL_LOG_DIR/$4.log"
+  su $1 -c "cd $2 && git clone $3 >> $INSTALL_LOG_DIR/$4.log"
 }
 userGitChekout()
 {
-   echo "$ git checkout $2"   
-   su $1 -c "git checkout $2"
+   # userCd $1 $2
+
+   echo "$ cd $2 && git checkout $3"
+   su $1 -c "cd $2 && git checkout $3"
 }
 userWgetTarxzf(){
-	userDo $1 "wget $1"
-	userDo $1 "tar xzf $2"
+
+	echo "$ cd $2 && wget $3 && tar xzf $3"
+	su $1 -c "cd $2 && wget $3 && tar xzf $3"
 }
 chmodx(){
 	echo "# chmod +x $1"
