@@ -56,15 +56,15 @@ userDo()
 }
 suCd()
 {
-  echo "# $1"
+  echo "# cd $1"
   cd $1
 }
 suDo(){
 
-  suCd $2
+  suCd $1
 
-  echo "# $1"
-  $1
+  echo "# $2"
+  $2
 }
 userDoLog()
 {
@@ -73,16 +73,13 @@ userDoLog()
 }
 suDoLog()
 {
-  suCd $2
+  suCd $1
   
-  echo "# $1 >> $INSTALL_LOG_DIR/$3.log"
-  $1 >> $INSTALL_LOG_DIR/$3.log
+  echo "# $2 >> $INSTALL_LOG_DIR/$3.log"
+  $2 >> $INSTALL_LOG_DIR/$3.log
 }
 userCongigure()
-{
-	
-  # userCd $1 $2
-  
+{  
   CMD="$3"
   CMD3="${CMD//[\"]/\\\"}"
      
@@ -131,3 +128,16 @@ function btcd(){
 
 	$PROJECT_BITCOIN_DIR/src/./bitcoind -regtest -datadir=$USER_BITCOIN_DIR
 }
+function simplicityenv()
+{
+	nix-shell -p "(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])"
+}
+function b-dae()
+{
+ 	btcd -datadir=$USER_BITCOIN_DIR
+}
+function b-cli()
+{
+	btc -datadir=$USER_BITCOIN_DIR
+}
+

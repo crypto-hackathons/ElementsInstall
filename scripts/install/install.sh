@@ -69,10 +69,10 @@ if [ "$APT" == "yes" ]
 		echo "**************"
 		echo "Apt install"
 		echo "**************"
-		suDoLog "apt-get update -y" "apt_update"
-		suDoLog "apt-get upgrade -y" "apt_upgrade"
-		suDoLog "apt-get install -y git apt-utils $APT_LIST"
-		suDoLog "apt-get update -y --fix-missing" "apt_missing"
+		suDoLog ./ "apt-get update -y" "apt_update"
+		suDoLog ./ "apt-get upgrade -y" "apt_upgrade"
+		suDoLog ./ "apt-get install -y git apt-utils $APT_LIST"
+		suDoLog ./ "apt-get update -y --fix-missing" "apt_missing"
 fi
 if [ "$BERKELEY_DB" == "yes" ]
    then 
@@ -93,7 +93,7 @@ if [ "$BITCOIN" == "yes" ]
 		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$PROJECT_BITCOIN_DIR/./autogen.sh" "bitcoin_autogen"
 		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$BITCOIN_CONFIGURE" "bitcoin_configure"
 		suDoLog "$PROJECT_BITCOIN_DIR" make "bitcoin_make"		
-		suDo "nohup btcd -daemon &>/dev/null &"
+		suDo "$PROJECT_DIR" "nohup btcd -daemon &>/dev/null &"
 fi
 if [ "$SIMPLICITY" == "yes" ]
    then
@@ -117,20 +117,22 @@ if [ "$NIX" == "yes" ]
 		echo "Nix install"
 		echo "**************"
 		userMkdir $USER "$PROJECT_NIX_DIR"		
-		userDo $USER "$PROJECT_DIR" "curl https://nixos.org/nix/install | sh"		
+		userDoLog $USER "$PROJECT_DIR" "curl https://nixos.org/nix/install | sh"		
 		userDo $USER "$PROJECT_DIR" ". /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh"		
-		userDo $USER "$PROJECT_SIMPLICITY_DIR" "nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
+		simplicityenv
+		
 fi
 if [ "$ELEMENTS" == "yes" ]
    then
 		echo "**************"
 		echo "Elements install"
-		echo "**************"		
+		echo "**************"	
+		userGitChekout $USER "$PROJECT_ELEMENTS_DIR" $PROJECT_ELEMENTS_BRANCH			
 		userDo $USER "$PROJECT_ELEMENTS_DIR" "$PROJECT_ELEMENTS_DIR/./autogen.sh"		
-		userDoLog $USER "$PROJECT_ELEMENTS_DIR" "$PROJECT_ELEMENTS_DIR/./configure BDB_LIBS=\"-L${BDB_PREFIX}/lib -ldb_cxx-4.8\" BDB_CFLAGS=\"-I${BDB_PREFIX}/include\" --disable-dependency-tracking --with-gui=no --disable-test --disable-bench" "elements_congigure"
+		userDoLog $USER "$PROJECT_ELEMENTS_DIR" "$ELEMENTS_CONFIGURE" "elements_configure"
 		suDoLog  "$PROJECT_ELEMENTS_DIR" "make" "element_make"
 		suDoLog  "$PROJECT_ELEMENTS_DIR" "make install" "elements_make_install"
-		suDo  "$PROJECT_ELEMENTS_DIR" "which elementsd"
+		suDo "$PROJECT_ELEMENTS_DIR" "which elementsd"
 fi
 if [ "$PERSONAS" == "yes" ]
    then
