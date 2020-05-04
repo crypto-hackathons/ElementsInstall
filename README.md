@@ -13,7 +13,16 @@ Your configuration in the conf/elementsProject.conf file.
 Ccopy files or
 git clone https://github.com/crypto-hackathons/ElementsInstall.git
 
-And type in superuser: cd ElementsInstall/scripts && chmod +x install.sh && ./install.sh $USER
+And type in superuser: cd ElementsInstall/scripts && chmod +x install.sh && ./install.sh -u $USER -a yes -k yes -b yes -s yes -n yes -e yes -p yes
+
+u) User install
+a) APT install
+k) BERKELEY_DB install
+b) BITCOIN install
+s) SIMPLICITY install
+n) NIX install
+e) ELEMENTS install
+p) PERSONAS install
 
 ## Start:
 
