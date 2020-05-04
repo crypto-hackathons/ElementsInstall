@@ -7,7 +7,7 @@ function sourceForUser()
 	if [ -f "../../conf/elementsProject_$1_$2.conf" ]
    then
 	    echo "# rm ../../conf/elementsProject_$1_$2.conf"
-	    rm "../../conf/elementsProject_$1_$2.conf"
+	    rm -y "../../conf/elementsProject_$1_$2.conf"
     fi
 	source ../../conf/elementsProject.conf $1 "root" >> "../../conf/elementsProject_$1_$2.conf"
 	echo "# cat ../../conf/elementsProject_$1_$2.conf"
@@ -117,7 +117,15 @@ userGitChekout()
 userWgetTarxzf(){
 
 	echo "$ cd $2 && wget $3 && tar xzf $3"
-	su $1 -c "cd $2 && wget $3 && tar xzf $3"
+	BASENAME=basename $3
+	su $1 -c "cd $2 && wget $3"
+	echo "FN=$3"
+	FN=$3
+	echo "BN=\"${FN##*/}\""
+	BN="${FN##*/}"
+	echo "$BN"
+	echo "cd $2 && tar xzf $BN"	
+	su $1 -c "cd $2 && tar xzf $BN"
 }
 chmodx(){
 	echo "# chmod +x $1"
