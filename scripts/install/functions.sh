@@ -51,9 +51,7 @@ userCd()
 }
 userDo()
 {
-  # userCd $1 $2
-
-  echo "# cd $2 && $3"
+  echo "$ cd $2 && $3"
   su $1 -c "cd $2 && $3"
 }
 suCd()
@@ -70,8 +68,6 @@ suDo(){
 }
 userDoLog()
 {
-  # userCd $1 $2
-
   echo "$ cd $2 && $3 >> $INSTALL_LOG_DIR/$4.log"
   su $1 -c "cd $2 && $3" >> $INSTALL_LOG_DIR/$4.log
 }
