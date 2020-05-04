@@ -106,7 +106,7 @@ if [ "$SIMPLICITY" == "yes" ]
 		userDoLog $USER "$PROJECT_DIR" "cabal install bech32-1.0.2 unification-fd cereal lens-family-2.0.0 SHA MemoTrie" "simplicity_cabal_install_lib"
 		userDoLog $USER "$PROJECT_SIMPLICITY_DIR" "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >> sh.rustup.rs"
 		userDo $USER "$PROJECT_SIMPLICITY_DIR" "sh sh.rustup.rs -y"
-		userDo $USER "$PROJECT_SIMPLICITY_DIR" "source /home/$PROJECT_USER/.cargo/env"		
+		userDo $USER "$PROJECT_SIMPLICITY_DIR" "source /home/$USER/.cargo/env"		
 		userMkdir $USER "$PROJECT_HAL_DIR"		
 		userWgetTarxzf $USER "$PROJECT_HAL_DIR" "https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz" "hal-0.6.1-vendored.tar.gz"
 		userDoLog $USER "$PROJECT_HAL_DIR" "cargo install hal" "hal_install"

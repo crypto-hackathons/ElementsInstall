@@ -115,11 +115,11 @@ userWgetTarxzf(){
 	echo "$ cd $2 && wget $3 && tar xzf $3"
 	BASENAME=basename $3
 	su $1 -c "cd $2 && wget $3"
-	echo "FN=$3"
+	echo "$ FN=$3"
 	FN=$3
-	echo "BN=\"${FN##*/}\""
+	echo "$ BN=\"${FN##*/}\""
 	BN="${FN##*/}"
-	echo "$BN"
+	echo "$ $BN"
 	echo "cd $2 && tar xzf $BN"	
 	su $1 -c "cd $2 && tar xzf $BN"
 }
