@@ -1,11 +1,7 @@
 #!/bin/bash
 
-function sourceForUser()
-{
-	rm "../../conf/elementsProject_$1_$2.conf"
-	source ../../conf/elementsProject.conf $1 "root" >> "../../conf/elementsProject_$1_$2.conf"
-	cat "../../conf/elementsProject_$1_$2.conf"
-}
+clear
+source functions.sh
 
 USER=$USER
 APT="yes"
@@ -101,10 +97,8 @@ if [ "$BITCOIN" == "yes" ]
 		allCd $USER "$PROJECT_BITCOIN_DIR"
 		userDoLog $USER "$BITCOIN_CONFIGURE" "bitcoin_configure"
 		allCd $USER "$PROJECT_BITCOIN_DIR"
-		suDoLog make "bitcoin_make"
-		
-		suDo "btcd -daemon"
-		exit
+		suDoLog make "bitcoin_make"		
+		suDo "nohup btcd -daemon &>/dev/null &"
 fi
 if [ "$SIMPLICITY" == "yes" ]
    then
@@ -113,14 +107,15 @@ if [ "$SIMPLICITY" == "yes" ]
 		echo "**************"
 		allCd $USER "$PROJECT_DIR"
 		userGitClone $USER "https://github.com/ElementsProject/simplicity.git" "simplicity_gitClone" "$PROJECT_SIMPLICITY_DIR"
-		userDoLog $USER "cabal update" "simplicity_cabal_update"
-		
+		allCd $USER "$PROJECT_SIMPLICITY_DIR"
+		userGitChekout $USER "$PROJECT_SIMPLICITY_BRANCH"
+		allCd $USER "$PROJECT_DIR"
+		userDoLog $USER "cabal update" "simplicity_cabal_update"		
 		userDoLog $USER "cabal install bech32-1.0.2 unification-fd cereal lens-family-2.0.0 SHA MemoTrie" "simplicity_cabal_install_lib"
 		userDoLog $USER "cabal install" "simplicity_cabal_install"
 		
-		allCd $USER "$PROJECT_SIMPLICITY_DIR"
+		allCd $USER "$PROJECT_SIMPLICITY_DIR"		
 		
-		userGitChekout $USER "2867955c0c93418f45ffe8ea0a7b1277b785fdc4"
 		useDo $USER "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
 		
 		userDo $USER "source /home/$PROJECT_USER/.cargo/env"
@@ -132,6 +127,8 @@ if [ "$SIMPLICITY" == "yes" ]
 		userWgetTarxzf $USER "https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz" "hal-0.6.1-vendored.tar.gz"
 		
 		userDoLog $USER "cargo install hal" "hal_install"
+		
+		exit;
 fi
 exit
 if [ "$NIX" == "yes" ]
