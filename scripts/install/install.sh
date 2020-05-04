@@ -109,9 +109,7 @@ if [ "$SIMPLICITY" == "yes" ]
 		userDo $USER "$PROJECT_SIMPLICITY_DIR" "source /home/$USER/.cargo/env"		
 		userMkdir $USER "$PROJECT_HAL_DIR"		
 		userWgetTarxzf $USER "$PROJECT_HAL_DIR" "https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz" "hal-0.6.1-vendored.tar.gz"
-		userDoLog $USER "$PROJECT_HAL_DIR" "cargo install hal" "hal_install"
-		
-		exit;
+		userDoLog $USER "$PROJECT_HAL_DIR" "source /home/$USER/.cargo/env && cargo install hal" "hal_install"
 fi
 exit
 if [ "$NIX" == "yes" ]
