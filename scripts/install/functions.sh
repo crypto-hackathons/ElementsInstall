@@ -88,8 +88,6 @@ userCongigure()
 }
 userGitClone()
 {
-   # userCd $1 $2
-
    if [ -d "$5" ]; then
         echo "# echo \"$5 exist\""
 	    echo "# rm -rf $5"
@@ -102,8 +100,6 @@ userGitClone()
 }
 userGitChekout()
 {
-   # userCd $1 $2
-
    echo "$ cd $2 && git checkout $3"
    su $1 -c "cd $2 && git checkout $3"
 }
@@ -140,4 +136,15 @@ function b-cli()
 {
 	btc -datadir=$USER_BITCOIN_DIR
 }
-
+function alice-dae()
+{
+	elementsd -datadir=$USER_ALICE_DIR
+}
+function bob-dae()
+{
+	elementsd -datadir=$USER_BOB_DIR
+}
+function bob-cli()
+{
+	elements-cli -datadir=$USER_BOB_DIR
+}

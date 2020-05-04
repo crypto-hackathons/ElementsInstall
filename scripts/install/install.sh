@@ -92,7 +92,7 @@ if [ "$BITCOIN" == "yes" ]
 		userGitChekout $USER "$PROJECT_BITCOIN_DIR" $PROJECT_BITCOIN_BRANCH
 		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$PROJECT_BITCOIN_DIR/./autogen.sh" "bitcoin_autogen"
 		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$BITCOIN_CONFIGURE" "bitcoin_configure"
-		suDoLog "$PROJECT_BITCOIN_DIR" make "bitcoin_make"		
+		suDoLog "$PROJECT_BITCOIN_DIR" make "bitcoin_make"	
 		suDo "$PROJECT_DIR" "nohup btcd -daemon &>/dev/null &"
 fi
 if [ "$SIMPLICITY" == "yes" ]
@@ -140,11 +140,11 @@ if [ "$PERSONAS" == "yes" ]
 		echo "Personas install"
 		echo "**************"		
 		userMkdir $USER "$USER_BITCOIN_DIR"
-		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial" "cp $USER_BITCOIN_DIR/bitcoin.conf $BITCOIN_DIR/bitcoin.conf"
+		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial" "cp $BITCOIN_DIR/bitcoin.conf  $USER_BITCOIN_DIR/bitcoin.conf"
 		userMkdir $USER "$USER_ALICE_DIR"
-		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $USER_BITCOIN_DIR/elements1.conf $USER_ALICE_DIR/elements.conf"
+		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $USER_ALICE_DIR/elements.conf $USER_BITCOIN_DIR/elements1.conf"
 		userMkdir $USER "$USER_BOB_DIR"
-		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $USER_BITCOIN_DIR/elements2.conf $USER_BOB_DIR/elements.conf"
+		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $USER_BOB_DIR/elements.conf $USER_BITCOIN_DIR/elements2.conf"
 		
 		userDo $USER "$PROJECT_DIR" "b-dae"
 		userDo $USER "$PROJECT_DIR" "alice-dae"
