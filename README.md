@@ -1,14 +1,18 @@
+# Elements + Simplicity Project Environnement
+
 Tested for Debian 10.
 
 Your machine needs at least 1.5 GB of memory and 12 GB of storage.
 
-# Elements Project Environnement
+A project for build an Elements + Simplicity project environnement (dev, test or prod)
 
 ## Configure:
 
 Your configuration in the conf/elementsProject.conf file.
 
 ## Install:
+
+/!\ The install take around 2h
 
 Ccopy files or
 git clone https://github.com/crypto-hackathons/ElementsInstall.git
