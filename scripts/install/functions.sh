@@ -4,14 +4,21 @@ shopt -s expand_aliases
 
 function sourceForUser()
 {	
-	if [ -f "../../conf/elementsProject_$1_$2.conf" ]
-   then
-	    echo "# rm ../../conf/elementsProject_$1_$2.conf"
-	    rm -y "../../conf/elementsProject_$1_$2.conf"
+	PROJECT_CONF="../../conf/elementsProject.conf"
+	export USER_CONF="/home/$1/.elementsProject_$2_$3.conf"	
+
+	if [ -f "$USER_CONF" ]
+   then   
+	    echo "# rm $USER_CONF"
+	    rm -y $USER_CONF
     fi
-	source ../../conf/elementsProject.conf $1 "root" >> "../../conf/elementsProject_$1_$2.conf"
-	echo "# cat ../../conf/elementsProject_$1_$2.conf"
-	cat "../../conf/elementsProject_$1_$2.conf"
+    echo "# source $PROJECT_CONF $1 root $3 >> $USER_CONF"
+	source $PROJECT_CONF $1 root $3 >> $USER_CONF
+	
+	echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
+	chmod 0755 $CONF_FILE && chown $USER $CONF_FILE
+	echo "# chmod +x $CONF_FILE" 
+	chmod +x $CONF_FILE
 }
 echoPart(){
 
@@ -116,27 +123,25 @@ userWgetTarxzf(){
 	echo "cd $2 && tar xzf $BN"	
 	su $1 -c "cd $2 && tar xzf $BN"
 }
-chmodx(){
+chmodx()
+{
 	echo "# chmod +x $1"
 	chmod +x $1	
 }
 function simplicityenv()
 {
-	echo "nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
 	nix-shell -p "(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])"
 }
-function btcd(){
-
-	echo "nohup $PROJECT_BITCOIN_DIR/src/./bitcoind -regtest -datadir=$USER_BITCOIN_DIR &>/dev/null &"
+function btcd()
+{
 	nohup $PROJECT_BITCOIN_DIR/src/./bitcoind -regtest -datadir=$USER_BITCOIN_DIR &>/dev/null &
 }
 function btc-cli()
 {
-	$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest -datadir=$USER_BITCOIN_DIR
+	$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -datadir=$USER_BITCOIN_DIR
 }
 function aliced()
-{
-	echo "nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -regtest -datadir=$USER_ALICE_DIR &>/dev/null &"	
+{	
 	nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -regtest -datadir=$USER_ALICE_DIR &>/dev/null &
 }
 function bobd()
@@ -145,11 +150,11 @@ function bobd()
 }
 function alice-cli()
 {
-	$PROJECT_ELEMENTS_DIR/src/./elements-cli -regtest -datadir=$USER_ALICE_DIR
+	$PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_ALICE_DIR
 }
 function bob-cli()
 {
-	$PROJECT_ELEMENTS_DIR/src/./elements-cli -regtest -datadir=$USER_BOB_DIR
+	$PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_BOB_DIR
 }
 function aliceGetNewAddress()
 {

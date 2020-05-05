@@ -1,7 +1,31 @@
 #!/bin/bash
 
-clear
 
+function sourceForUser()
+{	
+	PROJECT_CONF="../../conf/elementsProject.conf"
+	export USER_CONF="/home/$1/.elementsProject_$2_$3.conf"	
+
+	if [ -f "$USER_CONF" ]
+   then   
+	    echo "# rm $USER_CONF"
+	    rm -y $USER_CONF
+    fi
+    echo "# source $PROJECT_CONF $1 root $3 >> $USER_CONF"
+	source $PROJECT_CONF $1 root $3 >> $USER_CONF
+	
+	echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
+	chmod 0755 $CONF_FILE && chown $USER $CONF_FILE
+	echo "# chmod +x $CONF_FILE" 
+	chmod +x $CONF_FILE
+}
+clear
+echo "**************"
+echo "The install take around 2h"
+echo "**************"
+echo "**************"
+echo "Options"
+echo "**************"
 USER=$USER
 APT="yes"
 BERKELEY_DB="yes"
@@ -9,8 +33,9 @@ BITCOIN="yes"
 NIX="yes"
 ELEMENTS="yes"
 PERSONAS="yes"
+ENVIRONNEMENT="regtest"
 
-while getopts u:a:k:b:s:n:e:p: option
+while getopts u:a:k:b:s:n:e:p:v: option
 	do
 		case "${option}"
 		in
@@ -22,6 +47,7 @@ while getopts u:a:k:b:s:n:e:p: option
 			n) NIX=${OPTARG};;
 			e) ELEMENTS=${OPTARG};;
 			p) PERSONAS=${OPTARG};;
+			v) ENVIRONNEMENT=${OPTARG};;
 		esac
 	done
 
@@ -30,9 +56,6 @@ if [ $USER == "root" ]
    		echo "USER must not be root"
    		exit
 fi
-echo "**************"
-echo "Options"
-echo "**************"
 echo "USER=$USER"
 echo "APT=$APT"
 echo "BERKELEY_DB=$BERKELEY_DB"
@@ -40,23 +63,19 @@ echo "BITCOIN=$BITCOIN"
 echo "NIX=$NIX"
 echo "ELEMENTS=$ELEMENTS"
 echo "PERSONAS=$PERSONAS"
+echo "ENVIRONNEMENT=$ENVIRONNEMENT"
 
 echo "**************"
 echo "Configure"
 echo "**************"
-source functions.sh
-sourceForUser $USER "root"
-su $USER -c "source functions.sh && sourceForUser $USER $USER"
+HERE=`pwd`
+sourceForUser $USER "root" $ENVIRONNEMENT
+su $USER -c "cd $HERE && source functions.sh && sourceForUser $USER $USER $ENVIRONNEMENT"
+
 echo "# echo \"run with $USER\""
 
-echo "**************"
-echo "Install"
-echo "**************"
-echo "**************"
-echo "Directory"
-echo "**************"
 if [ -d "$PROJECT_DIR" ]; then
-	echo "$ echo \"$PROJECT_DIR exist\""
+	echo "# echo \"$PROJECT_DIR exist\""
 else
    echo "# mkdir $PROJECT_DIR"
    mkdir $PROJECT_DIR
@@ -66,6 +85,7 @@ fi
 
 if [ "$APT" == "yes" ]
    then 
+   		clear
 		echo "**************"
 		echo "Apt install"
 		echo "**************"
@@ -76,6 +96,7 @@ if [ "$APT" == "yes" ]
 fi
 if [ "$BERKELEY_DB" == "yes" ]
    then 
+   		clear
 		echo "**************"
 		echo "Berkeley DB install"
 		echo "**************"
@@ -85,6 +106,7 @@ if [ "$BERKELEY_DB" == "yes" ]
 fi
 if [ "$BITCOIN" == "yes" ]
    then 
+   		clear
 		echo "**************"
 		echo "Bitcoin install"
 		echo "**************"		
@@ -96,6 +118,7 @@ if [ "$BITCOIN" == "yes" ]
 fi
 if [ "$SIMPLICITY" == "yes" ]
    then
+   		clear
 		echo "**************"
 		echo "Simplicity install"
 		echo "**************"
@@ -112,6 +135,7 @@ if [ "$SIMPLICITY" == "yes" ]
 fi
 if [ "$NIX" == "yes" ]
    then
+   		clear
 		echo "**************"
 		echo "Nix install"
 		echo "**************"
@@ -123,6 +147,7 @@ if [ "$NIX" == "yes" ]
 fi
 if [ "$ELEMENTS" == "yes" ]
    then
+   		clear
 		echo "**************"
 		echo "Elements install"
 		echo "**************"	
@@ -134,25 +159,28 @@ if [ "$ELEMENTS" == "yes" ]
 fi
 if [ "$PERSONAS" == "yes" ]
    then
+   		clear
 		echo "**************"
 		echo "Personas install"
 		echo "**************"		
 		userMkdir $USER "$USER_BITCOIN_DIR"
 		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial" "cp $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial/bitcoin.conf  $USER_BITCOIN_DIR/bitcoin.conf"
 		userMkdir $USER "$USER_ALICE_DIR"
-		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial/elements1.conf $USER_BITCOIN_DIR/elements.conf"
+		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial/elements1.conf $USER_ALICE_DIR/elements.conf"
 		userMkdir $USER "$USER_BOB_DIR"
-		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial/elements2.conf $USER_BITCOIN_DIR/elements.conf"
+		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial/elements2.conf $USER_BOB_DIR/elements.conf"
 			
 		chmodx "$INSTALL_DIR/../elementsProjectStart.sh"
 		chmodx "$INSTALL_DIR/../elementsProjectStop.sh"
 		chmodx "$INSTALL_DIR/../../test/test_transaction_simple.sh"
 				
-		bobGetNewAddress
-		echo bobGetNewAddress
-		echo $(bobGetNewAddress)
+		userDo $USER "$INSTALL_DIR/../" "$INSTALL_DIR/.././elementsProjectStart.sh -u $USER -v regtest"
 		
-		userDo $USER "$INSTALL_DIR/../" "$INSTALL_DIR/.././elementsProjectStart.sh"
+		echo "$PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_BOB_DIR getnewaddress"
+		$PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_BOB_DIR getnewaddress
+		exit
+		
+		
 		
 		echo "# ALICE_MINER_ADDRESS=aliceGetNewAddress"
 		ALICE_MINER_ADDRESS=aliceGetNewAddress
@@ -167,6 +195,11 @@ if [ "$PERSONAS" == "yes" ]
 		echo "# BOB_RECEIVER_ADDRESS=bobGetNewAddress"
 		BOB_RECEIVER_ADDRESS=bobGetNewAddress
 		echo "BOB_RECEIVER_ADDRESS=$BOB_RECEIVER_ADDRESS" >> $INSTALL_DIR/../../conf/personas.conf
+		
+		exit
 fi
-userDo $USER "$INSTALL_LOG_DIR" "ls -al"		
-userDo $USER "$INSTALL_CONF_DIR" "ls -al"
+cat $CONF_FILE" >> $INSTALL_DIR/result.log
+ls -al" >> $INSTALL_DIR/result.log
+ls -al" >> $INSTALL_DIR/result.log
+
+echo "# cat "result.log"
