@@ -132,6 +132,10 @@ function b-dae()
 {
  	btcd -datadir=$USER_BITCOIN_DIR
 }
+function btc()
+{
+	$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest
+}
 function b-cli()
 {
 	btc -datadir=$USER_BITCOIN_DIR
@@ -143,6 +147,10 @@ function alice-dae()
 function bob-dae()
 {
 	elementsd -datadir=$USER_BOB_DIR
+}
+function alice-cli()
+{
+	elements-cli -datadir=$USER_ALICE_DIR
 }
 function bob-cli()
 {
