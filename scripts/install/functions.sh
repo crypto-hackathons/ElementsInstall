@@ -120,39 +120,42 @@ chmodx(){
 	echo "# chmod +x $1"
 	chmod +x $1	
 }
-function btcd(){
-
-	$PROJECT_BITCOIN_DIR/src/./bitcoind -regtest -datadir=$USER_BITCOIN_DIR
-}
 function simplicityenv()
 {
+	echo "nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
 	nix-shell -p "(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])"
 }
-function b-dae()
-{
- 	btcd -datadir=$USER_BITCOIN_DIR
+function btcd(){
+
+	echo "nohup $PROJECT_BITCOIN_DIR/src/./bitcoind -regtest -datadir=$USER_BITCOIN_DIR &>/dev/null &"
+	nohup $PROJECT_BITCOIN_DIR/src/./bitcoind -regtest -datadir=$USER_BITCOIN_DIR &>/dev/null &
 }
-function btc()
+function btc-cli()
 {
-	$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest
+	$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -regtest -datadir=$USER_BITCOIN_DIR
 }
-function b-cli()
+function aliced()
 {
-	btc -datadir=$USER_BITCOIN_DIR
+	echo "nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -regtest -datadir=$USER_ALICE_DIR &>/dev/null &"	
+	nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -regtest -datadir=$USER_ALICE_DIR &>/dev/null &
 }
-function alice-dae()
+function bobd()
 {
-	elementsd -datadir=$USER_ALICE_DIR
-}
-function bob-dae()
-{
-	elementsd -datadir=$USER_BOB_DIR
+	nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -regtest -datadir=$USER_BOB_DIR &>/dev/null &
 }
 function alice-cli()
 {
-	elements-cli -datadir=$USER_ALICE_DIR
+	$PROJECT_ELEMENTS_DIR/src/./elements-cli -regtest -datadir=$USER_ALICE_DIR
 }
 function bob-cli()
 {
-	elements-cli -datadir=$USER_BOB_DIR
+	$PROJECT_ELEMENTS_DIR/src/./elements-cli -regtest -datadir=$USER_BOB_DIR
+}
+function aliceGetNewAddress()
+{
+	alice-cli getnewaddress
+}
+function bobGetNewAddress()
+{
+	bob-cli getnewaddress
 }

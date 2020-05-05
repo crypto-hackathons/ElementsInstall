@@ -92,8 +92,7 @@ if [ "$BITCOIN" == "yes" ]
 		userGitChekout $USER "$PROJECT_BITCOIN_DIR" $PROJECT_BITCOIN_BRANCH
 		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$PROJECT_BITCOIN_DIR/./autogen.sh" "bitcoin_autogen"
 		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$BITCOIN_CONFIGURE" "bitcoin_configure"
-		suDoLog "$PROJECT_BITCOIN_DIR" make "bitcoin_make"	
-		suDo "$PROJECT_DIR" "nohup btcd -daemon &>/dev/null &"
+		suDoLog "$PROJECT_BITCOIN_DIR" make "bitcoin_make"
 fi
 if [ "$SIMPLICITY" == "yes" ]
    then
@@ -132,7 +131,6 @@ if [ "$ELEMENTS" == "yes" ]
 		userDoLog $USER "$PROJECT_ELEMENTS_DIR" "$ELEMENTS_CONFIGURE" "elements_configure"
 		suDoLog  "$PROJECT_ELEMENTS_DIR" "make" "element_make"
 		suDoLog  "$PROJECT_ELEMENTS_DIR" "make install" "elements_make_install"
-		suDo "$PROJECT_ELEMENTS_DIR" "which elementsd"
 fi
 if [ "$PERSONAS" == "yes" ]
    then
@@ -145,32 +143,30 @@ if [ "$PERSONAS" == "yes" ]
 		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial/elements1.conf $USER_BITCOIN_DIR/elements.conf"
 		userMkdir $USER "$USER_BOB_DIR"
 		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial/elements2.conf $USER_BITCOIN_DIR/elements.conf"
+			
+		chmodx "$INSTALL_DIR/../elementsProjectStart.sh"
+		chmodx "$INSTALL_DIR/../elementsProjectStop.sh"
+		chmodx "$INSTALL_DIR/../../test/test_transaction_simple.sh"
+				
+		bobGetNewAddress
+		echo bobGetNewAddress
+		echo $(bobGetNewAddress)
 		
-		userDo $USER "$PROJECT_DIR" "b-dae"
-		userDo $USER "$PROJECT_DIR" "alice-dae"
-		userDo $USER "$PROJECT_DIR" "bob-dae"
+		userDo $USER "$INSTALL_DIR/../" "$INSTALL_DIR/.././elementsProjectStart.sh"
 		
-		echo "# ALICE_MINER_ADDRESS=$(alice-cli getnewaddress)"
-		ALICE_MINER_ADDRESS=$(alice-cli getnewaddress)
-		echo "ALICE_MINER_ADDRESS=$ALICE_MINER_ADDRESS" >> $PROJECT_CONF
+		echo "# ALICE_MINER_ADDRESS=aliceGetNewAddress"
+		ALICE_MINER_ADDRESS=aliceGetNewAddress
+		echo "ALICE_MINER_ADDRESS=$ALICE_MINER_ADDRESS" >> $INSTALL_DIR/../../conf/personas.conf
+				
+		bobGetNewAddress
+		echo bobGetNewAddress
+		echo "# ALICE_RECEIVER_ADDRESS=$(bobGetNewAddress)"
+		ALICE_RECEIVER_ADDRESS=aliceGetNewAddress
+		echo "ALICE_RECEIVER_ADDRESS=$ALICE_RECEIVER_ADDRESS" >> $INSTALL_DIR/../../conf/personas.conf
 		
-		echo "# ALICE_RECEIVER_ADDRESS=$(alice-cli getnewaddress)"
-		ALICE_RECEIVER_ADDRESS=$(alice-cli getnewaddress)
-		echo "ALICE_RECEIVER_ADDRESS=$ALICE_RECEIVER_ADDRESS" >> $PROJECT_CONF
-		
-		echo "# BOB_RECEIVER_ADDRESS=$(bob-cli getnewaddress)"
-		BOB_RECEIVER_ADDRESS=$(bob-cli getnewaddress)
-		echo "BOB_RECEIVER_ADDRESS=$BOB_RECEIVER_ADDRESS" >> $PROJECT_CONF
-		
-		echo "# ALICE_MINER_ADDRESS = $ALICE_MINER_ADDRESS" 
-		ALICE_MINER_ADDRESS = $ALICE_MINER_ADDRESS
-		echo "ALICE_MINER_ADDRESS=$ALICE_MINER_ADDRESS" >> $PROJECT_CONF
+		echo "# BOB_RECEIVER_ADDRESS=bobGetNewAddress"
+		BOB_RECEIVER_ADDRESS=bobGetNewAddress
+		echo "BOB_RECEIVER_ADDRESS=$BOB_RECEIVER_ADDRESS" >> $INSTALL_DIR/../../conf/personas.conf
 fi
-echo "**************"
-echo "Activation"
-echo "**************"
-allCd $USER "$INSTALL_DIR"
-chmodx "$INSTALL_DIR/elementsProjectStart.sh"
-chmodx "$INSTALL_DIR/elementsProjectStop.sh"
-chmodx "$INSTALL_DIR/../../test/test_transaction_simple.sh"
-userDo $USER "$INSTALL_LOG_DIR" "ls -al"
+userDo $USER "$INSTALL_LOG_DIR" "ls -al"		
+userDo $USER "$INSTALL_CONF_DIR" "ls -al"
