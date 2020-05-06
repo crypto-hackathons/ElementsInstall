@@ -17,33 +17,35 @@ Your configuration in the conf/elementsProject.conf file.
 Ccopy files or
 git clone https://github.com/crypto-hackathons/ElementsInstall.git
 
-And type in superuser: cd ElementsInstall/scripts && chmod +x install.sh && ./install.sh -u $USER -a yes -k yes -b yes -s yes -n yes -e yes -p yes
+And type in superuser: cd ElementsInstall/scripts && chmod +x install.sh && ./install.sh -u $USER -a yes -k yes -b yes -s yes -n yes -e yes -p yes -v regtest
 
-u) User name
+u) User: user name (user datas in the home directory)
 
-a) APT install
+a) APT: "yes" for install
 
-k) BERKELEY_DB install
+k) BERKELEY_DB: "yes" for install
 
-b) BITCOIN install
+b) BITCOIN: "yes" for install
 
-s) SIMPLICITY install
+s) SIMPLICITY: "yes" for install
 
-n) NIX install
+n) NIX: "yes" for install
 
-e) ELEMENTS install
+e) ELEMENTS: "yes" for install
 
-p) PERSONAS install
+p) PERSONAS: "yes" for install Bob and Alice Elements wallets, Alice is a also a miner
+
+v) ENVIRONNEMENT: [main], [test] or [regtest] for configuration 
 
 
 ## Start:
 
-Type: scripts/./elementsProjectStart.sh $USER
+Type: scripts/./elementsProjectStart.sh -u $USER -v $ENVIRONNEMENT
 
 ## Stop:
 
-Type: scripts/./elementsProjectStop.sh $USER
+Type: scripts/./elementsProjectStop.sh -u $USER -v $ENVIRONNEMENT
 
 ## Test:
 
-Type: test/./test_transaction_simple.sh $USER
+Type: test/./test_transaction_simple.sh -u $USER -v $ENVIRONNEMENT
