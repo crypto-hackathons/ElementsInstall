@@ -9,15 +9,15 @@ function sourceForUser()
 	if [ -f "$USER_CONF" ]
    then   
 	    echo "# rm $USER_CONF"
-	    rm -y $USER_CONF
+	    rm $USER_CONF
     fi
     echo "# source $PROJECT_CONF $1 root $3 >> $USER_CONF"
 	source $PROJECT_CONF $1 root $3 >> $USER_CONF
 	
 	echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
-	chmod 0755 $CONF_FILE && chown $USER $CONF_FILE
-	echo "# chmod +x $CONF_FILE" 
-	chmod +x $CONF_FILE
+	chmod 0755 $USER_CONF && chown $USER $USER_CONF
+	echo "# chmod +x $USER_CONF" 
+	chmod +x $USER_CONF
 }
 clear
 echo "**************"
@@ -56,6 +56,7 @@ if [ $USER == "root" ]
    		echo "USER must not be root"
    		exit
 fi
+echo "# ./install.sh -u ncantu -a $USER -k $APT -b $BERKELEY_DB -s $BITCOIN -n $NIX -e $ELEMENTS -p $PERSONAS -v =$ENVIRONNEMENT"
 echo "USER=$USER"
 echo "APT=$APT"
 echo "BERKELEY_DB=$BERKELEY_DB"
@@ -85,30 +86,43 @@ fi
 
 if [ "$APT" == "yes" ]
    then 
-   		clear
+   		echo ""
+   		echo ""
+   		echo ""
 		echo "**************"
 		echo "Apt install"
+		echo "The full install take around 2h"
+		echo "This part take around 10min"
 		echo "**************"
-		suDoLog ./ "apt-get update -y" "apt_update"
-		suDoLog ./ "apt-get upgrade -y" "apt_upgrade"
-		suDoLog ./ "apt-get install -y git apt-utils $APT_LIST"
-		suDoLog ./ "apt-get update -y --fix-missing" "apt_missing"
+		suDoLog $INSTALL_DIR "apt-get install -y apt-utils" "apt_install"
+		suDoLog $INSTALL_DIR "apt-get update -y" "apt_update" "apt_update"
+		suDoLog $INSTALL_DIR "apt-get upgrade -y" "apt_upgrade" "apt_upgrade"
+		suDoLog $INSTALL_DIR "apt-get install -y $APT_LIST" "apt_missing"
+		suDoLog $INSTALL_DIR "apt-get update -y --fix-missing" "apt_missing"
 fi
 if [ "$BERKELEY_DB" == "yes" ]
-   then 
-   		clear
+   then    		
+   		echo ""
+   		echo ""
+   		echo ""
 		echo "**************"
 		echo "Berkeley DB install"
+		echo "The full install take around 2h"
+		echo "This part take around 2h"
 		echo "**************"
 		userMkdir $USER "$PROJECT_DIR"
 		userGitClone $USER "$PROJECT_DIR" "https://github.com/ElementsProject/elements.git" "elements_gitClone" "$PROJECT_ELEMENTS_DIR"
 		suDoLog "$PROJECT_ELEMENTS_DIR" "$PROJECT_ELEMENTS_DIR/contrib/install_db4.sh $DB4_INSTALL_PATH" "db4_install"
 fi
 if [ "$BITCOIN" == "yes" ]
-   then 
-   		clear
+   then    		
+   		echo ""
+   		echo ""
+   		echo ""
 		echo "**************"
 		echo "Bitcoin install"
+		echo "The full install take around 2h"
+		echo "This part take around 2h"
 		echo "**************"		
 		userGitClone $USER "$PROJECT_DIR" "https://github.com/roconnor-blockstream/bitcoin.git" "bitcoin_gitClone" "$PROJECT_BITCOIN_DIR"
 		userGitChekout $USER "$PROJECT_BITCOIN_DIR" $PROJECT_BITCOIN_BRANCH
@@ -117,10 +131,14 @@ if [ "$BITCOIN" == "yes" ]
 		suDoLog "$PROJECT_BITCOIN_DIR" make "bitcoin_make"
 fi
 if [ "$SIMPLICITY" == "yes" ]
-   then
-   		clear
+   then   
+   		echo ""
+   		echo ""
+   		echo ""
 		echo "**************"
 		echo "Simplicity install"
+		echo "The full install take around 2h"
+		echo "This part take around 2h"
 		echo "**************"
 		userGitClone $USER "$PROJECT_DIR" "https://github.com/ElementsProject/simplicity.git" "simplicity_gitClone" "$PROJECT_SIMPLICITY_DIR"
 		userGitChekout $USER "$PROJECT_SIMPLICITY_DIR" "$PROJECT_SIMPLICITY_BRANCH"
@@ -135,9 +153,13 @@ if [ "$SIMPLICITY" == "yes" ]
 fi
 if [ "$NIX" == "yes" ]
    then
-   		clear
+   		echo ""
+   		echo ""
+   		echo ""
 		echo "**************"
 		echo "Nix install"
+		echo "The full install take around 2h"
+		echo "This part take around 2h"
 		echo "**************"
 		userMkdir $USER "$PROJECT_NIX_DIR"		
 		userDoLog $USER "$PROJECT_DIR" "curl https://nixos.org/nix/install | sh"		
@@ -147,9 +169,12 @@ if [ "$NIX" == "yes" ]
 fi
 if [ "$ELEMENTS" == "yes" ]
    then
-   		clear
+   		echo ""
+   		echo ""
+   		echo ""
 		echo "**************"
 		echo "Elements install"
+		echo "This part take around 2h"
 		echo "**************"	
 		userGitChekout $USER "$PROJECT_ELEMENTS_DIR" $PROJECT_ELEMENTS_BRANCH			
 		userDo $USER "$PROJECT_ELEMENTS_DIR" "$PROJECT_ELEMENTS_DIR/./autogen.sh"		
@@ -159,9 +184,13 @@ if [ "$ELEMENTS" == "yes" ]
 fi
 if [ "$PERSONAS" == "yes" ]
    then
-   		clear
+   		echo ""
+   		echo ""
+   		echo ""
 		echo "**************"
 		echo "Personas install"
+		echo "The full install take around 2h"
+		echo "This part take around 2h"
 		echo "**************"		
 		userMkdir $USER "$USER_BITCOIN_DIR"
 		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial" "cp $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial/bitcoin.conf  $USER_BITCOIN_DIR/bitcoin.conf"
@@ -198,7 +227,10 @@ if [ "$PERSONAS" == "yes" ]
 		
 		exit
 fi
-cat $CONF_FILE" >> $INSTALL_DIR/result.log
+echo ""
+echo ""
+echo ""
+cat $USER_CONF" >> $INSTALL_DIR/result.log
 ls -al" >> $INSTALL_DIR/result.log
 ls -al" >> $INSTALL_DIR/result.log
 

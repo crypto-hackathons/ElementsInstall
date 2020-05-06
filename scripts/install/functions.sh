@@ -10,15 +10,15 @@ function sourceForUser()
 	if [ -f "$USER_CONF" ]
    then   
 	    echo "# rm $USER_CONF"
-	    rm -y $USER_CONF
+	    rm  $USER_CONF
     fi
     echo "# source $PROJECT_CONF $1 root $3 >> $USER_CONF"
 	source $PROJECT_CONF $1 root $3 >> $USER_CONF
 	
 	echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
-	chmod 0755 $CONF_FILE && chown $USER $CONF_FILE
-	echo "# chmod +x $CONF_FILE" 
-	chmod +x $CONF_FILE
+	chmod 0755 $USER_CONF && chown $USER $USER_CONF
+	echo "# chmod +x $USER_CONF" 
+	chmod +x $USER_CONF
 }
 echoPart(){
 

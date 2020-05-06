@@ -22,7 +22,7 @@ echo "ENVIRONNEMENT=$ENVIRONNEMENT"
 
 source install/functions.sh
 cd install
-source ../../conf/elementsProject.conf $USER $USER $ENVIRONNEMENT
+source "/home/$USER/.elementsProject_$USER_$ENVIRONNEMENT.conf" $USER $USER $ENVIRONNEMENT
 
 echo "nohup $PROJECT_BITCOIN_DIR/src/./bitcoind -datadir=$USER_BITCOIN_DIR &>/dev/null &"
 btcd
