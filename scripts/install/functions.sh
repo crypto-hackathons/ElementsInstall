@@ -198,23 +198,26 @@ mainchainrpcpassword=$PROJECT_BITCOIN_REGTEST_RPC_PASSWORD
 initialfreecoins=$6"
 
 	echo "# echo $BC >> $USER_CONF"
-	echo EC >> $USER_CONF
+	echo $EC >> $USER_CONF
 	
 	echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
 	chmod 0755 $USER_CONF && chown $USER $USER_CONF
 	echo "**************"
 	echo "Configration $7"
-	echo "**************" 
+	echo "**************"
+	echo "# echo cat $USER_CONF" 
 	echo cat $USER_CONF
 	
-	echo "nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -datadir=$USER_DIR &>/dev/null &"
+	echo "# nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -datadir=$USER_DIR &>/dev/null &"
 	nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -datadir=$USER_DIR &>/dev/null &
 	
-	echo "USER_ADDRESS=$PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_DIR getnewaddress"
-	USER_ADDRESS=$PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_DIR getnewaddress
-	echo $USER_ADDRESS
-	echo "USER_NAME=$7" >> $USER_CONF	
-	echo "USER_ADDRESS=$USER_ADDRESS" >> $USER_CONF	
+	echo "# USER_ADDRESS=$($PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_DIR getnewaddress)"
+	USER_ADDRESS=$($PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_DIR getnewaddress)
+	echo "# echo USER_NAME=$7 >> $USER_CONF"
+	echo "USER_NAME=$7" >> $USER_CONF
+	echo "# echo USER_ADDRESS=$USER_ADDRESS >> $USER_CONF"	
+	echo "USER_ADDRESS=$USER_ADDRESS" >> $USER_CONF
+	echo "# echo USER_CONF=$USER_CONF >> $USER_CONF"	
 	echo "USER_CONF=$USER_CONF" >> $USER_CONF
 }
 
