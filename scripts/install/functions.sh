@@ -181,24 +181,10 @@ function personaCreate()
 	    rm  $USER_CONF
     fi
 	userMkdir $USER "$USER_DIR"
-	EC="chain=$CHAIN 
-rpcuser=$1
-rpcpassword=$2
-elementsregtest.rpcport=$3
-elementsregtest.port=$4
-elementsregtest.connect=localhost:$5
-rpcport=$3
-daemon=1
-listen=1
-txindex=1
-validatepegin=1
-mainchainrpcport=$PROJECT_BITCOIN_REGTEST_RPC_PORT
-mainchainrpcuser=$PROJECT_BITCOIN_REGTEST_RPC_USER
-mainchainrpcpassword=$PROJECT_BITCOIN_REGTEST_RPC_PASSWORD
-initialfreecoins=$6"
+	EC="chain=$CHAIN\nrpcuser=$1\nrpcpassword=$2\nelementsregtest.rpcport=$3\nelementsregtest.port=$4\nelementsregtest.connect=localhost:$5\nrpcport=$3\ndaemon=1\nlisten=1\ntxindex=1\nvalidatepegin=1\nmainchainrpcport=$PROJECT_BITCOIN_REGTEST_RPC_PORT\nmainchainrpcuser=$PROJECT_BITCOIN_REGTEST_RPC_USER\nmainchainrpcpassword=$PROJECT_BITCOIN_REGTEST_RPC_PASSWORD\ninitialfreecoins=$6\n"
 
-	echo "# echo $BC >> $USER_CONF"
-	echo $EC >> $USER_CONF
+	echo "# echo -e $BC >> $USER_CONF"
+	echo -e $EC >> $USER_CONF
 	
 	echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
 	chmod 0755 $USER_CONF && chown $USER $USER_CONF
@@ -220,5 +206,22 @@ initialfreecoins=$6"
 	echo "# echo USER_CONF=$USER_CONF >> $USER_CONF"	
 	echo "USER_CONF=$USER_CONF" >> $USER_CONF
 }
+function personaAddressAdd()
+{
 
-
+	echo "**************"
+	echo "Configration of $1_$2"
+	echo "**************"
+	# $1 user
+	# $2 address_suffix
+	echo "# USER_DIR=\"/home/$PROJECT_USER/$1Data\""
+	USER_DIR="/home/$PROJECT_USER/$1Data"
+	echo "# USER_CONF=$USER_DIR/elements.conf"
+	USER_CONF=$USER_DIR/elements.conf
+	echo "# USER_ADDRESS=$($PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_DIR getnewaddress)"
+	USER_ADDRESS=$($PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_DIR getnewaddress)
+	echo "# echo USER_NAME_$2=$1_$2 >> $USER_CONF"
+	echo "USER_NAME_$2=$1_$2" >> $USER_CONF
+	echo "# echo USER_ADDRESS_$2=$USER_ADDRESS >> $USER_CONF"	
+	echo "USER_ADDRESS_$2=$USER_ADDRESS" >> $USER_CONF
+}

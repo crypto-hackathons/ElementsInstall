@@ -196,16 +196,10 @@ if [ "$PERSONAS" == "yes" ]
 		echo "**************"		
 		userMkdir $USER "$USER_BITCOIN_DIR"
 		
-		BC="regtest=$PROJECT_BITCOIN_REGTEST
-daemon=$PROJECT_BITCOIN_DAEMON
-txindex=$PROJECT_BITCOIN_TXINDEX
-regtest.rpcport=$PROJECT_BITCOIN_REGTEST_RPC_PORT
-regtest.port=$PROJECT_BITCOIN_REGTEST_PORT
-rpcuser=$PROJECT_BITCOIN_REGTEST_RPC_USER
-rpcpassword=password$PROJECT_BITCOIN_REGTEST_RPC_PASSWORD" 
+		BC="regtest=$PROJECT_BITCOIN_REGTEST\ndaemon=$PROJECT_BITCOIN_DAEMON\ntxindex=$PROJECT_BITCOIN_TXINDEX\nregtest.rpcport=$PROJECT_BITCOIN_REGTEST_RPC_PORT\nregtest.port=$PROJECT_BITCOIN_REGTEST_PORT\nrpcuser=$PROJECT_BITCOIN_REGTEST_RPC_USER\nrpcpassword=password$PROJECT_BITCOIN_REGTEST_RPC_PASSWORD\n"
 
-		echo "# echo $BC >> $USER_BITCOIN_CONF"
-		echo $BC >> $USER_BITCOIN_CONF
+		echo "# echo -e $BC >> $USER_BITCOIN_CONF"
+		echo -e $BC >> $USER_BITCOIN_CONF
 
 		echo "# chmod 0755 $USER_BITCOIN_CONF && chown $USER $USER_BITCOIN_CONF"
 		chmod 0755 $USER_BITCOIN_CONF && chown $USER $USER_BITCOIN_CONF
@@ -219,18 +213,25 @@ rpcpassword=password$PROJECT_BITCOIN_REGTEST_RPC_PASSWORD"
 		
 		echo "# personaCreate $PROJECT_ELEMENTS_REGTEST_RPC_USER_BOB $PROJECT_ELEMENTS_REGTEST_RPC_PASSWORD_BOB $PROJECT_ELEMENTS_REGTEST_RPC_PORT_BOB $PROJECT_ELEMENTS_REGTEST_PORT_BOB $PROJECT_ELEMENTS_REGTEST_PORT_LOCAL_BOB $PROJECT_ELEMENTS_INITIAL_FREE_COINS_BOB $USER_BOB_NAME"	
 		personaCreate $PROJECT_ELEMENTS_REGTEST_RPC_USER_BOB $PROJECT_ELEMENTS_REGTEST_RPC_PASSWORD_BOB $PROJECT_ELEMENTS_REGTEST_RPC_PORT_BOB $PROJECT_ELEMENTS_REGTEST_PORT_BOB $PROJECT_ELEMENTS_REGTEST_PORT_LOCAL_BOB $PROJECT_ELEMENTS_INITIAL_FREE_COINS_BOB $USER_BOB_NAME
+		
+		echo 
+		personaAddressAdd "ALICE" "MINER"
 			
 		chmodx "$INSTALL_DIR/../elementsProjectStart.sh"
 		chmodx "$INSTALL_DIR/../elementsProjectStop.sh"
 		chmodx "$INSTALL_DIR/../../test/test_transaction_simple.sh"
-		
-		exit
 fi
+exit
 echo ""
 echo ""
 echo ""
-cat $USER_CONF" >> $INSTALL_DIR/result.log
-ls -al" >> $INSTALL_DIR/result.log
-ls -al" >> $INSTALL_DIR/result.log
+cd $INSTALL_DIR
+cat ../../conf/elementsProject.conf >> $INSTALL_LOG_DIR/result.log
+cat /home/$USER/.elementsProject_$USER_$USER.conf >> $INSTALL_LOG_DIR/result.log
+cat USER_BITCOIN_CONF >> $INSTALL_LOG_DIR/result.log
+cat /home/$PROJECT_USER/ALICEData/elements.conf >> $INSTALL_LOG_DIR/result.log
+cat /home/$PROJECT_USER/BOBData/elements.conf >> $INSTALL_LOG_DIR/result.log
+ls $INSTALL_LOG_DIR -al >> $INSTALL_DIR/result.log
 
-echo "# cat "result.log"
+echo "# cat $INSTALL_LOG_DIR/result.log"
+cat $INSTALL_LOG_DIR/result.log
