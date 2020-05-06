@@ -166,10 +166,10 @@ function bobGetNewAddress()
 }
 function personaCreate()
 {
-	$CHAIN="elementsregtest"
+	CHAIN="elementsregtest"
 	if [ "$PROJECT_ENVIRONNEMENT" != "regtest" ]
 	   then
-	   $elementsregtest="elementsmain" 
+	   CHAIN="elementsmain" 
 	fi	
 	echo "# USER_DIR=\"/home/$PROJECT_USER/$7Data\""
 	USER_DIR="/home/$PROJECT_USER/$7Data"
@@ -181,7 +181,7 @@ function personaCreate()
 	    rm  $USER_CONF
     fi
 	userMkdir $USER "$USER_DIR"
-	echo "chain=$CHAIN
+	EC="chain=$CHAIN 
 rpcuser=$1
 rpcpassword=$2
 elementsregtest.rpcport=$3
@@ -195,12 +195,15 @@ validatepegin=1
 mainchainrpcport=$PROJECT_BITCOIN_REGTEST_RPC_PORT
 mainchainrpcuser=$PROJECT_BITCOIN_REGTEST_RPC_USER
 mainchainrpcpassword=$PROJECT_BITCOIN_REGTEST_RPC_PASSWORD
-initialfreecoins=$6" >> $USER_CONF
+initialfreecoins=$6"
 
+	echo "# echo $BC >> $USER_CONF"
+	echo EC >> $USER_CONF
+	
 	echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
 	chmod 0755 $USER_CONF && chown $USER $USER_CONF
 	echo "**************"
-	echo "Configration $7
+	echo "Configration $7"
 	echo "**************" 
 	echo cat $USER_CONF
 	
