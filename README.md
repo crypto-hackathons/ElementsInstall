@@ -17,7 +17,7 @@ Your configuration in the conf/elementsProject.conf file.
 Ccopy files or
 git clone https://github.com/crypto-hackathons/ElementsInstall.git
 
-And type in superuser: cd ElementsInstall/scripts && chmod +x install.sh && ./install.sh -u $USER -a yes -k yes -b yes -s yes -n yes -e yes -p yes -v regtest
+And type in superuser: cd YOUR_PATH/ElementsInstall/scripts/install && chmod +x install.sh && ./install.sh -u $USER -a yes -k yes -b yes -s yes -n yes -e yes -p yes -v regtest
 
 u) User: user name (user datas in the home directory)
 
