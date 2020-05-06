@@ -176,7 +176,7 @@ if [ "$ELEMENTS" == "yes" ]
    		echo ""
 		echo "**************"
 		echo "Elements install"
-		echo "This part take around 2h"
+		echo "This part take around 40min"
 		echo "**************"	
 		userGitChekout $USER "$PROJECT_ELEMENTS_DIR" $PROJECT_ELEMENTS_BRANCH			
 		userDo $USER "$PROJECT_ELEMENTS_DIR" "$PROJECT_ELEMENTS_DIR/./autogen.sh"		
@@ -192,40 +192,34 @@ if [ "$PERSONAS" == "yes" ]
 		echo "**************"
 		echo "Personas install"
 		echo "The full install take around 2h"
-		echo "This part take around 2h"
+		echo "This part take around 1min"
 		echo "**************"		
 		userMkdir $USER "$USER_BITCOIN_DIR"
-		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial" "cp $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial/bitcoin.conf  $USER_BITCOIN_DIR/bitcoin.conf"
-		userMkdir $USER "$USER_ALICE_DIR"
-		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial/elements1.conf $USER_ALICE_DIR/elements.conf"
-		userMkdir $USER "$USER_BOB_DIR"
-		userDo $USER "$PROJECT_ELEMENTS_DIR/contrib/assets_tutorial"  "cp $PROJECT_ELEMENTS_DIR/contrib/assets_tutorial/elements2.conf $USER_BOB_DIR/elements.conf"
+		
+		echo "regtest=$PROJECT_BITCOIN_REGTEST
+daemon=$PROJECT_BITCOIN_DAEMON
+txindex=$PROJECT_BITCOIN_TXINDEX
+regtest.rpcport=$PROJECT_BITCOIN_REGTEST_RPC_PORT
+regtest.port=$PROJECT_BITCOIN_REGTEST_PORT
+rpcuser=$PROJECT_BITCOIN_REGTEST_RPC_USER
+rpcpassword=password$PROJECT_BITCOIN_REGTEST_RPC_PASSWORD" >> $USER_BITCOIN_CONF
+
+		echo "# chmod 0755 $USER_BITCOIN_CONF && chown $USER $USER_BITCOIN_CONF"
+		chmod 0755 $USER_BITCOIN_CONF && chown $USER $USER_BITCOIN_CONF
+		echo cat $USER_BITCOIN_CONF
+		
+		echo "# nohup $PROJECT_BITCOIN_DIR/src/./bitcoind -datadir=$USER_BITCOIN_DIR &>/dev/null &"
+		btcd
+		
+		echo "# personaCreate $PROJECT_ELEMENTS_REGTEST_RPC_USER_ALICE $PROJECT_ELEMENTS_REGTEST_RPC_PASSWORD_ALICE $PROJECT_ELEMENTS_REGTEST_RPC_PORT_ALICE $PROJECT_ELEMENTS_REGTEST_PORT_ALICE $PROJECT_ELEMENTS_REGTEST_PORT_LOCAL_ALICE $PROJECT_ELEMENTS_INITIAL_FREE_COINS_ALICE $USER_ALICE_NAME"
+		personaCreate $PROJECT_ELEMENTS_REGTEST_RPC_USER_ALICE $PROJECT_ELEMENTS_REGTEST_RPC_PASSWORD_ALICE $PROJECT_ELEMENTS_REGTEST_RPC_PORT_ALICE $PROJECT_ELEMENTS_REGTEST_PORT_ALICE $PROJECT_ELEMENTS_REGTEST_PORT_LOCAL_ALICE $PROJECT_ELEMENTS_INITIAL_FREE_COINS_ALICE $USER_ALICE_NAME
+		
+		echo "# personaCreate $PROJECT_ELEMENTS_REGTEST_RPC_USER_BOB $PROJECT_ELEMENTS_REGTEST_RPC_PASSWORD_BOB $PROJECT_ELEMENTS_REGTEST_RPC_PORT_BOB $PROJECT_ELEMENTS_REGTEST_PORT_BOB $PROJECT_ELEMENTS_REGTEST_PORT_LOCAL_BOB $PROJECT_ELEMENTS_INITIAL_FREE_COINS_BOB $USER_BOB_NAME"	
+		personaCreate $PROJECT_ELEMENTS_REGTEST_RPC_USER_BOB $PROJECT_ELEMENTS_REGTEST_RPC_PASSWORD_BOB $PROJECT_ELEMENTS_REGTEST_RPC_PORT_BOB $PROJECT_ELEMENTS_REGTEST_PORT_BOB $PROJECT_ELEMENTS_REGTEST_PORT_LOCAL_BOB $PROJECT_ELEMENTS_INITIAL_FREE_COINS_BOB $USER_BOB_NAME
 			
 		chmodx "$INSTALL_DIR/../elementsProjectStart.sh"
 		chmodx "$INSTALL_DIR/../elementsProjectStop.sh"
 		chmodx "$INSTALL_DIR/../../test/test_transaction_simple.sh"
-				
-		userDo $USER "$INSTALL_DIR/../" "$INSTALL_DIR/.././elementsProjectStart.sh -u $USER -v regtest"
-		
-		echo "$PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_BOB_DIR getnewaddress"
-		$PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_BOB_DIR getnewaddress
-		exit
-		
-		
-		
-		echo "# ALICE_MINER_ADDRESS=aliceGetNewAddress"
-		ALICE_MINER_ADDRESS=aliceGetNewAddress
-		echo "ALICE_MINER_ADDRESS=$ALICE_MINER_ADDRESS" >> $INSTALL_DIR/../../conf/personas.conf
-				
-		bobGetNewAddress
-		echo bobGetNewAddress
-		echo "# ALICE_RECEIVER_ADDRESS=$(bobGetNewAddress)"
-		ALICE_RECEIVER_ADDRESS=aliceGetNewAddress
-		echo "ALICE_RECEIVER_ADDRESS=$ALICE_RECEIVER_ADDRESS" >> $INSTALL_DIR/../../conf/personas.conf
-		
-		echo "# BOB_RECEIVER_ADDRESS=bobGetNewAddress"
-		BOB_RECEIVER_ADDRESS=bobGetNewAddress
-		echo "BOB_RECEIVER_ADDRESS=$BOB_RECEIVER_ADDRESS" >> $INSTALL_DIR/../../conf/personas.conf
 		
 		exit
 fi

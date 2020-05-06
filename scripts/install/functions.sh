@@ -164,3 +164,55 @@ function bobGetNewAddress()
 {
 	bob-cli getnewaddress
 }
+function personaCreate()
+{
+	$CHAIN="elementsregtest"
+	if [ "$PROJECT_ENVIRONNEMENT" != "regtest" ]
+	   then
+	   $elementsregtest="elementsmain" 
+	fi	
+	echo "# USER_DIR=\"/home/$PROJECT_USER/$7Data\""
+	USER_DIR="/home/$PROJECT_USER/$7Data"
+	echo "# USER_CONF=$USER_DIR/elements.conf"
+	USER_CONF=$USER_DIR/elements.conf
+	if [ -f "$USER_CONF" ]
+   then   
+	    echo "# rm $USER_CONF"
+	    rm  $USER_CONF
+    fi
+	userMkdir $USER "$USER_DIR"
+	echo "chain=$CHAIN
+rpcuser=$1
+rpcpassword=$2
+elementsregtest.rpcport=$3
+elementsregtest.port=$4
+elementsregtest.connect=localhost:$5
+rpcport=$3
+daemon=1
+listen=1
+txindex=1
+validatepegin=1
+mainchainrpcport=$PROJECT_BITCOIN_REGTEST_RPC_PORT
+mainchainrpcuser=$PROJECT_BITCOIN_REGTEST_RPC_USER
+mainchainrpcpassword=$PROJECT_BITCOIN_REGTEST_RPC_PASSWORD
+initialfreecoins=$6" >> $USER_CONF
+
+	echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
+	chmod 0755 $USER_CONF && chown $USER $USER_CONF
+	echo "**************"
+	echo "Configration $7
+	echo "**************" 
+	echo cat $USER_CONF
+	
+	echo "nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -datadir=$USER_DIR &>/dev/null &"
+	nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -datadir=$USER_DIR &>/dev/null &
+	
+	echo "USER_ADDRESS=$PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_DIR getnewaddress"
+	USER_ADDRESS=$PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_DIR getnewaddress
+	echo $USER_ADDRESS
+	echo "USER_NAME=$7" >> $USER_CONF	
+	echo "USER_ADDRESS=$USER_ADDRESS" >> $USER_CONF	
+	echo "USER_CONF=$USER_CONF" >> $USER_CONF
+}
+
+

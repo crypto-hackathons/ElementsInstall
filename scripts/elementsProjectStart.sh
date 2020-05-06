@@ -19,9 +19,11 @@ if [ $USER == "root" ]
 fi
 echo "USER=$USER"
 echo "ENVIRONNEMENT=$ENVIRONNEMENT"
-
+echo "$ source install/functions.sh" 
 source install/functions.sh
+echo "cd install"
 cd install
+echo "$ source \"/home/$USER/.elementsProject_$USER_$ENVIRONNEMENT.conf\" $USER $USER $ENVIRONNEMENT"
 source "/home/$USER/.elementsProject_$USER_$ENVIRONNEMENT.conf" $USER $USER $ENVIRONNEMENT
 
 echo "nohup $PROJECT_BITCOIN_DIR/src/./bitcoind -datadir=$USER_BITCOIN_DIR &>/dev/null &"
