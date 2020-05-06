@@ -17,7 +17,7 @@ Your configuration in the conf/elementsProject.conf file.
 Ccopy files or
 git clone https://github.com/crypto-hackathons/ElementsInstall.git
 
-And type in superuser: 
+And type: 
 
 $ su
 
