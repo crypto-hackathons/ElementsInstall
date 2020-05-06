@@ -19,12 +19,17 @@ function sourceForUser()
 	echo "# chmod +x $USER_CONF" 
 	chmod +x $USER_CONF
 }
-clear
+echo ""
+echo ""
+echo ""
 echo "**************"
-echo "The install take around 2h"
+echo "The full install take around 2h"
 echo "**************"
+echo ""
+echo ""
+echo ""   	
 echo "**************"
-echo "Options"
+echo "Configure"
 echo "**************"
 USER=$USER
 APT="yes"
@@ -66,9 +71,6 @@ echo "ELEMENTS=$ELEMENTS"
 echo "PERSONAS=$PERSONAS"
 echo "ENVIRONNEMENT=$ENVIRONNEMENT"
 
-echo "**************"
-echo "Configure"
-echo "**************"
 HERE=`pwd`
 sourceForUser $USER "root" $ENVIRONNEMENT
 su $USER -c "cd $HERE && source functions.sh && sourceForUser $USER $USER $ENVIRONNEMENT"
@@ -97,7 +99,7 @@ if [ "$APT" == "yes" ]
 		suDoLog $INSTALL_DIR "apt-get install -y apt-utils" "apt_install"
 		suDoLog $INSTALL_DIR "apt-get update -y" "apt_update" "apt_update"
 		suDoLog $INSTALL_DIR "apt-get upgrade -y" "apt_upgrade" "apt_upgrade"
-		suDoLog $INSTALL_DIR "apt-get install -y $APT_LIST" "apt_missing"
+		suDoLog $INSTALL_DIR "apt-get install -y $APT_LIST" "apt_install"
 		suDoLog $INSTALL_DIR "apt-get update -y --fix-missing" "apt_missing"
 fi
 if [ "$BERKELEY_DB" == "yes" ]
@@ -108,7 +110,7 @@ if [ "$BERKELEY_DB" == "yes" ]
 		echo "**************"
 		echo "Berkeley DB install"
 		echo "The full install take around 2h"
-		echo "This part take around 2h"
+		echo "This part take around 5min"
 		echo "**************"
 		userMkdir $USER "$PROJECT_DIR"
 		userGitClone $USER "$PROJECT_DIR" "https://github.com/ElementsProject/elements.git" "elements_gitClone" "$PROJECT_ELEMENTS_DIR"
