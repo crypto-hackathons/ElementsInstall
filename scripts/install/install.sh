@@ -126,11 +126,11 @@ if [ "$BITCOIN" == "yes" ]
 		echo "The full install take around 2h"
 		echo "This part take around 40min"
 		echo "**************"		
-		userGitClone $USER "$PROJECT_DIR" "https://github.com/roconnor-blockstream/bitcoin.git" "bitcoin_gitClone" "$PROJECT_BITCOIN_DIR"
+		userGitClone $USER "$PROJECT_DIR" "https://github.com/roconnor-blockstream/bitcoin.git" "bitcoin_install" "$PROJECT_BITCOIN_DIR"
 		userGitChekout $USER "$PROJECT_BITCOIN_DIR" $PROJECT_BITCOIN_BRANCH
-		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$PROJECT_BITCOIN_DIR/./autogen.sh" "bitcoin_autogen"
-		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$BITCOIN_CONFIGURE" "bitcoin_configure"
-		suDoLog "$PROJECT_BITCOIN_DIR" make "bitcoin_make"
+		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$PROJECT_BITCOIN_DIR/./autogen.sh" "bitcoin_install"
+		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$BITCOIN_CONFIGURE" "bitcoin_install"
+		suDoLog "$PROJECT_BITCOIN_DIR" make "bitcoin_install"
 fi
 if [ "$SIMPLICITY" == "yes" ]
    then   
@@ -142,16 +142,16 @@ if [ "$SIMPLICITY" == "yes" ]
 		echo "The full install take around 2h"
 		echo "This part take around 5min"
 		echo "**************"
-		userGitClone $USER "$PROJECT_DIR" "https://github.com/ElementsProject/simplicity.git" "simplicity_gitClone" "$PROJECT_SIMPLICITY_DIR"
+		userGitClone $USER "$PROJECT_DIR" "https://github.com/ElementsProject/simplicity.git" "simplicity_install" "$PROJECT_SIMPLICITY_DIR"
 		userGitChekout $USER "$PROJECT_SIMPLICITY_DIR" "$PROJECT_SIMPLICITY_BRANCH"
-		userDoLog $USER "$PROJECT_DIR" "cabal update" "simplicity_cabal_update"		
-		userDoLog $USER "$PROJECT_DIR" "cabal install bech32-1.0.2 unification-fd cereal lens-family-2.0.0 SHA MemoTrie" "simplicity_cabal_install_lib"
+		userDoLog $USER "$PROJECT_DIR" "cabal update" "simplicity_install"		
+		userDoLog $USER "$PROJECT_DIR" "cabal install bech32-1.0.2 unification-fd cereal lens-family-2.0.0 SHA MemoTrie" "simplicity_install"
 		userDoLog $USER "$PROJECT_SIMPLICITY_DIR" "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs >> sh.rustup.rs"
 		userDo $USER "$PROJECT_SIMPLICITY_DIR" "sh sh.rustup.rs -y"
-		userDo $USER "$PROJECT_SIMPLICITY_DIR" "source /home/$USER/.cargo/env"		
+		userDo $USER "$PROJECT_SIMPLICITY_DIR" "source /home/$USER/.cargo/env"
 		userMkdir $USER "$PROJECT_HAL_DIR"		
 		userWgetTarxzf $USER "$PROJECT_HAL_DIR" "https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz" "hal-0.6.1-vendored.tar.gz"
-		userDoLog $USER "$PROJECT_HAL_DIR" "source /home/$USER/.cargo/env && cargo install hal" "hal_install"
+		userDoLog $USER "$PROJECT_HAL_DIR" "source /home/$USER/.cargo/env && cargo install hal" "simplicity_install"
 fi
 if [ "$NIX" == "yes" ]
    then
@@ -180,9 +180,9 @@ if [ "$ELEMENTS" == "yes" ]
 		echo "**************"	
 		userGitChekout $USER "$PROJECT_ELEMENTS_DIR" $PROJECT_ELEMENTS_BRANCH			
 		userDo $USER "$PROJECT_ELEMENTS_DIR" "$PROJECT_ELEMENTS_DIR/./autogen.sh"		
-		userDoLog $USER "$PROJECT_ELEMENTS_DIR" "$ELEMENTS_CONFIGURE" "elements_configure"
-		suDoLog  "$PROJECT_ELEMENTS_DIR" "make" "element_make"
-		suDoLog  "$PROJECT_ELEMENTS_DIR" "make install" "elements_make_install"
+		userDoLog $USER "$PROJECT_ELEMENTS_DIR" "$ELEMENTS_CONFIGURE" "elements_install"
+		suDoLog  "$PROJECT_ELEMENTS_DIR" "make" "elements_install"
+		suDoLog  "$PROJECT_ELEMENTS_DIR" "make install" "elements_install"
 fi
 if [ "$PERSONAS" == "yes" ]
    then
