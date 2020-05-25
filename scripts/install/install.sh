@@ -226,14 +226,28 @@ if [ "$PERSONAS" == "yes" ]
 		chmodx "$INSTALL_DIR/../elementsProjectStop.sh"
 		chmodx "$INSTALL_DIR/../../test/test_transaction_simple.sh"
 fi
-if [ "$NODE" == "yes" ]
+if [ "$NODE" == "yes" ]	
    then   
+	echo ""
+	echo ""
+	echo ""
+	echo "**************"
+	echo "Node install"
+	echo "This part take around 2min"
+	echo "**************"
     curl -sL https://deb.nodesource.com/setup_14.x | bash -
    	apt-get install -y nodejs
    	npm install -g npm@latest
 fi
 if [ "$WALLET" == "yes" ]
    then   
+	echo ""
+	echo ""
+	echo ""
+	echo "**************"
+	echo "Wallet app framework install"
+	echo "This part take around 2min"
+	echo "**************"
    	git clone git://github.com/bcoin-org/bcoin.git
 	cd bcoin
 	npm rebuild
