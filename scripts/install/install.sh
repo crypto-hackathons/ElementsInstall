@@ -39,7 +39,7 @@ NIX="yes"
 ELEMENTS="yes"
 PERSONAS="yes"
 ENVIRONNEMENT="regtest"
-GREENADDRESS="yes"
+WALLET="yes"
 
 while getopts u:a:k:b:s:n:e:p:v:g: option
 	do
@@ -63,7 +63,7 @@ if [ $USER == "root" ]
    		echo "USER must not be root"
    		exit
 fi
-echo "# ./install.sh -u ncantu -a $USER -k $APT -b $BERKELEY_DB -s $BITCOIN -n $NIX -e $ELEMENTS -p $PERSONAS -v =$ENVIRONNEMENT -g =$GREENADDRESS"
+echo "# ./install.sh -u ncantu -a $USER -k $APT -b $BERKELEY_DB -s $BITCOIN -n $NIX -e $ELEMENTS -p $PERSONAS -v =$ENVIRONNEMENT -w =$WALLET"
 echo "USER=$USER"
 echo "APT=$APT"
 echo "BERKELEY_DB=$BERKELEY_DB"
@@ -72,7 +72,7 @@ echo "NIX=$NIX"
 echo "ELEMENTS=$ELEMENTS"
 echo "PERSONAS=$PERSONAS"
 echo "ENVIRONNEMENT=$ENVIRONNEMENT"
-echo "GREENADDRESS=$GREENADDRESS"
+echo "WALLET=$WALLET"
 
 HERE=`pwd`
 sourceForUser $USER "root" $ENVIRONNEMENT
@@ -224,20 +224,15 @@ if [ "$PERSONAS" == "yes" ]
 		chmodx "$INSTALL_DIR/../elementsProjectStop.sh"
 		chmodx "$INSTALL_DIR/../../test/test_transaction_simple.sh"
 fi
-if [ "$GREENADDRESS" == "yes" ]
+if [ "$WALLET" == "yes" ]
    then   
-   	git clone https://github.com/bitcoin-core/secp256k1.git
-   	cd secp256k1
-   	./autogen.sh
-	./configure
-	make
-	make check
-	make install
-   	cd ..
-    git clone https://github.com/Blockstream/gdk.git
-    cd gdk     
-    pip3 install pip3 install --upgrade setuptools
-	pip3 install -r tools/requirements.txt or pip3 install --user -r tools/requirements.txt
+    curl -sL https://deb.nodesource.com/setup_14.x | bash -
+   	apt-get install -y nodejs
+   	npm install -g npm@latest
+   	git clone git://github.com/bcoin-org/bcoin.git
+	cd bcoin
+	npm rebuild
+	./bin/bcoin
 fi
 exit
 echo ""
