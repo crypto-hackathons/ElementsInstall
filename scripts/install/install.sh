@@ -39,8 +39,9 @@ NIX="yes"
 ELEMENTS="yes"
 PERSONAS="yes"
 ENVIRONNEMENT="regtest"
+GREENADDRESS="yes"
 
-while getopts u:a:k:b:s:n:e:p:v: option
+while getopts u:a:k:b:s:n:e:p:v:g: option
 	do
 		case "${option}"
 		in
@@ -53,6 +54,7 @@ while getopts u:a:k:b:s:n:e:p:v: option
 			e) ELEMENTS=${OPTARG};;
 			p) PERSONAS=${OPTARG};;
 			v) ENVIRONNEMENT=${OPTARG};;
+			g) GREENADDRESS=${OPTARG};;
 		esac
 	done
 
@@ -61,7 +63,7 @@ if [ $USER == "root" ]
    		echo "USER must not be root"
    		exit
 fi
-echo "# ./install.sh -u ncantu -a $USER -k $APT -b $BERKELEY_DB -s $BITCOIN -n $NIX -e $ELEMENTS -p $PERSONAS -v =$ENVIRONNEMENT"
+echo "# ./install.sh -u ncantu -a $USER -k $APT -b $BERKELEY_DB -s $BITCOIN -n $NIX -e $ELEMENTS -p $PERSONAS -v =$ENVIRONNEMENT -g =$GREENADDRESS"
 echo "USER=$USER"
 echo "APT=$APT"
 echo "BERKELEY_DB=$BERKELEY_DB"
@@ -70,6 +72,7 @@ echo "NIX=$NIX"
 echo "ELEMENTS=$ELEMENTS"
 echo "PERSONAS=$PERSONAS"
 echo "ENVIRONNEMENT=$ENVIRONNEMENT"
+echo "GREENADDRESS=$GREENADDRESS"
 
 HERE=`pwd`
 sourceForUser $USER "root" $ENVIRONNEMENT
@@ -220,6 +223,21 @@ if [ "$PERSONAS" == "yes" ]
 		chmodx "$INSTALL_DIR/../elementsProjectStart.sh"
 		chmodx "$INSTALL_DIR/../elementsProjectStop.sh"
 		chmodx "$INSTALL_DIR/../../test/test_transaction_simple.sh"
+fi
+if [ "$GREENADDRESS" == "yes" ]
+   then   
+   	git clone https://github.com/bitcoin-core/secp256k1.git
+   	cd secp256k1
+   	./autogen.sh
+	./configure
+	make
+	make check
+	make install
+   	cd ..
+    git clone https://github.com/Blockstream/gdk.git
+    cd gdk     
+    pip3 install pip3 install --upgrade setuptools
+	pip3 install -r tools/requirements.txt or pip3 install --user -r tools/requirements.txt
 fi
 exit
 echo ""
