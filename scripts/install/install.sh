@@ -39,9 +39,10 @@ NIX="yes"
 ELEMENTS="yes"
 PERSONAS="yes"
 ENVIRONNEMENT="regtest"
+NODES="yes"
 WALLET="yes"
 
-while getopts u:a:k:b:s:n:e:p:v:g: option
+while getopts u:a:k:b:s:n:e:p:v:j:g: option
 	do
 		case "${option}"
 		in
@@ -54,6 +55,7 @@ while getopts u:a:k:b:s:n:e:p:v:g: option
 			e) ELEMENTS=${OPTARG};;
 			p) PERSONAS=${OPTARG};;
 			v) ENVIRONNEMENT=${OPTARG};;
+			j) NODES=${OPTARG};;
 			g) GREENADDRESS=${OPTARG};;
 		esac
 	done
@@ -63,7 +65,7 @@ if [ $USER == "root" ]
    		echo "USER must not be root"
    		exit
 fi
-echo "# ./install.sh -u ncantu -a $USER -k $APT -b $BERKELEY_DB -s $BITCOIN -n $NIX -e $ELEMENTS -p $PERSONAS -v =$ENVIRONNEMENT -w =$WALLET"
+echo "# ./install.sh -u ncantu -a $USER -k $APT -b $BERKELEY_DB -s $BITCOIN -n $NIX -e $ELEMENTS -p $PERSONAS -v $ENVIRONNEMENT -j =$NODES -w $WALLET"
 echo "USER=$USER"
 echo "APT=$APT"
 echo "BERKELEY_DB=$BERKELEY_DB"
@@ -224,15 +226,19 @@ if [ "$PERSONAS" == "yes" ]
 		chmodx "$INSTALL_DIR/../elementsProjectStop.sh"
 		chmodx "$INSTALL_DIR/../../test/test_transaction_simple.sh"
 fi
-if [ "$WALLET" == "yes" ]
+if [ "$NODE" == "yes" ]
    then   
     curl -sL https://deb.nodesource.com/setup_14.x | bash -
    	apt-get install -y nodejs
    	npm install -g npm@latest
+fi
+if [ "$WALLET" == "yes" ]
+   then   
    	git clone git://github.com/bcoin-org/bcoin.git
 	cd bcoin
 	npm rebuild
-	./bin/bcoin
+	npm install --global
+	# bcoin --http-host=0.0.0.0 --api-key $USER --daemon
 fi
 exit
 echo ""
