@@ -1,5 +1,10 @@
 #!/bin/bash
 
+function userRights()
+{
+    echo "# chmod 0755 $2 && chown $2"
+    chmod 0755 $2 && chown $1 $2
+}
 function sourceForUser()
 {	
    LIB_DIR="../../lib"
@@ -14,8 +19,7 @@ function sourceForUser()
     fi
     echo "# source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF"
     source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF	
-    echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
-    chmod 0755 $USER_CONF && chown $USER $USER_CONF
+    userRights $USER $USER_CONF
     echo "# chmod +x $USER_CONF" 
     chmod +x $USER_CONF
 }
@@ -38,11 +42,6 @@ function aliasAll()
     
 	echo "alias $1=\"$CMD2\""
 	alias $1="$CMD2"
-}
-function userRights()
-{
-    echo "# chmod 0755 $2 && chown $2"
-    chmod 0755 $2 && chown $1 $2
 }
 function userMkdir()
 {
