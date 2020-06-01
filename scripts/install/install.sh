@@ -92,7 +92,7 @@ else
 fi   
 
 echo "# echo \"Move to $PROJECT_DIR""
-userGitClone $USER "$PROJECT_DIR" "https://github.com/crypto-hackathons/ElementsInstall.git" "ElementProject_install" "$INSTALL_DIR"
+userGitClone $USER "$PROJECT_DIR" "$INSTALL_GIT" "ElementProject_install" "$INSTALL_DIR"
 echo "# chmod 0755 $PROJECT_DIR && chown $USER $PROJECT_DIR"
 chmod 0755 $INSTALL_DIR && chown $USER $INSTALL_DIR
 echo "# chmod 0755 $PROJECT_DIR && chown $USER $PROJECT_DIR"
@@ -127,7 +127,7 @@ if [ "$BERKELEY_DB" == "yes" ]
 		echo "# This part take around 5min"
 		echo "# **************"
 		userMkdir $USER "$PROJECT_DIR"
-		userGitClone $USER "$PROJECT_DIR" "https://github.com/ElementsProject/elements.git" "elements_gitClone" "$PROJECT_ELEMENTS_DIR"
+		userGitClone $USER "$PROJECT_DIR" "$ELEMENTS_GIT" "elements_gitClone" "$PROJECT_ELEMENTS_DIR"
 		suDoLog "$PROJECT_ELEMENTS_DIR" "$PROJECT_ELEMENTS_DIR/contrib/install_db4.sh $DB4_INSTALL_PATH" "db4_install"
 fi
 if [ "$BITCOIN" == "yes" ]
@@ -140,7 +140,7 @@ if [ "$BITCOIN" == "yes" ]
 		echo "# The full install take around 2h"
 		echo "# This part take around 40min"
 		echo "# **************"		
-		userGitClone $USER "$PROJECT_DIR" "https://github.com/roconnor-blockstream/bitcoin.git" "bitcoin_install" "$PROJECT_BITCOIN_DIR"
+		userGitClone $USER "$PROJECT_DIR" "$BITCOIN_SIMPLICITY_GIT" "bitcoin_install" "$PROJECT_BITCOIN_DIR"
 		userGitChekout $USER "$PROJECT_BITCOIN_DIR" $PROJECT_BITCOIN_BRANCH
 		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$PROJECT_BITCOIN_DIR/./autogen.sh" "bitcoin_install"
 		userDoLog $USER "$PROJECT_BITCOIN_DIR" "$BITCOIN_CONFIGURE" "bitcoin_install"
@@ -156,7 +156,7 @@ if [ "$SIMPLICITY" == "yes" ]
 		echo "# The full install take around 2h"
 		echo "# This part take around 5min"
 		echo "# **************"
-		userGitClone $USER "$PROJECT_DIR" "https://github.com/ElementsProject/simplicity.git" "simplicity_install" "$PROJECT_SIMPLICITY_DIR"
+		userGitClone $USER "$PROJECT_DIR" "$SIMPLICITY_GIT" "simplicity_install" "$PROJECT_SIMPLICITY_DIR"
 		userGitChekout $USER "$PROJECT_SIMPLICITY_DIR" "$PROJECT_SIMPLICITY_BRANCH"
 		userDoLog $USER "$PROJECT_DIR" "cabal update" "simplicity_install"		
 		userDoLog $USER "$PROJECT_DIR" "cabal install bech32-1.0.2 unification-fd cereal lens-family-2.0.0 SHA MemoTrie" "simplicity_install"
@@ -178,7 +178,7 @@ if [ "$NIX" == "yes" ]
 		echo "# This part take around 5min"
 		echo "# **************"
 		userMkdir $USER "$PROJECT_NIX_DIR"		
-		userDoLog $USER "$PROJECT_DIR" "curl https://nixos.org/nix/install | sh"		
+		userDoLog $USER "$PROJECT_DIR" "curl $NIX_INSTALL_URL | sh"		
 		userDo $USER "$PROJECT_DIR" ". /home/$PROJECT_USER/.nix-profile/etc/profile.d/nix.sh"		
 		simplicityenv
 		
