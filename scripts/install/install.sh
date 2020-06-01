@@ -164,7 +164,7 @@ if [ "$SIMPLICITY" == "yes" ]
 		userDo $USER "$PROJECT_SIMPLICITY_DIR" "sh sh.rustup.rs -y"
 		userDo $USER "$PROJECT_SIMPLICITY_DIR" "source /home/$USER/.cargo/env"
 		userMkdir $USER "$PROJECT_HAL_DIR"		
-		userWgetTarxzf $USER "$PROJECT_HAL_DIR" "https://github.com/stevenroose/hal/releases/download/v0.6.1/hal-0.6.1-vendored.tar.gz" "hal-0.6.1-vendored.tar.gz"
+		userWgetTarxzf $USER "$PROJECT_HAL_DIR" "$HAL_INSTALL_URL"
 		userDoLog $USER "$PROJECT_HAL_DIR" "source /home/$USER/.cargo/env && cargo install hal" "simplicity_install"
 fi
 if [ "$NIX" == "yes" ]
@@ -208,26 +208,20 @@ if [ "$PERSONAS" == "yes" ]
 		echo "# The full install take around 2h"
 		echo "# This part take around 1min"
 		echo "# **************"		
-		userMkdir $USER "$USER_BITCOIN_DIR"
-				BC="regtest=$PROJECT_BITCOIN_REGTEST\ndaemon=$PROJECT_BITCOIN_DAEMON\ntxindex=$PROJECT_BITCOIN_TXINDEX\nregtest.rpcport=$PROJECT_BITCOIN_REGTEST_RPC_PORT\nregtest.port=$PROJECT_BITCOIN_REGTEST_PORT\nrpcuser=$PROJECT_BITCOIN_REGTEST_RPC_USER\nrpcpassword=password$PROJECT_BITCOIN_REGTEST_RPC_PASSWORD\n"
-
+		userMkdir $USER "$USER_BITCOIN_DIR" BC="regtest=$PROJECT_BITCOIN_REGTEST\ndaemon=$PROJECT_BITCOIN_DAEMON\ntxindex=$PROJECT_BITCOIN_TXINDEX\nregtest.rpcport=$PROJECT_BITCOIN_REGTEST_RPC_PORT\nregtest.port=$PROJECT_BITCOIN_REGTEST_PORT\nrpcuser=$PROJECT_BITCOIN_REGTEST_RPC_USER\nrpcpassword=password$PROJECT_BITCOIN_REGTEST_RPC_PASSWORD\n"
 		suDoLog "$PROJECT_DIR" "echo -e $BC >> $USER_BITCOIN_CONF" "PersonasInstall"
-        suDoLog "$PROJECT_DIR" "chmod 0755 $USER_BITCOIN_CONF && chown $USER $USER_BITCOIN_CONF" "PersonasInstall"
-        suDoLog "$PROJECT_DIR" "echo cat $USER_BITCOIN_CONF" "PersonasInstall"
+	        suDoLog "$PROJECT_DIR" "chmod 0755 $USER_BITCOIN_CONF && chown $USER $USER_BITCOIN_CONF" "PersonasInstall"
+        	suDoLog "$PROJECT_DIR" "echo cat $USER_BITCOIN_CONF" "PersonasInstall"
 		suDoLog "$PROJECT_DIR" "btcd" "PersonasInstall"
-		
 		echo "# personaCreate $PROJECT_ELEMENTS_REGTEST_RPC_USER_ALICE $PROJECT_ELEMENTS_REGTEST_RPC_PASSWORD_ALICE $PROJECT_ELEMENTS_REGTEST_RPC_PORT_ALICE $PROJECT_ELEMENTS_REGTEST_PORT_ALICE $PROJECT_ELEMENTS_REGTEST_PORT_LOCAL_ALICE $PROJECT_ELEMENTS_INITIAL_FREE_COINS_ALICE $USER_ALICE_NAME"
 		personaCreate $PROJECT_ELEMENTS_REGTEST_RPC_USER_ALICE $PROJECT_ELEMENTS_REGTEST_RPC_PASSWORD_ALICE $PROJECT_ELEMENTS_REGTEST_RPC_PORT_ALICE $PROJECT_ELEMENTS_REGTEST_PORT_ALICE $PROJECT_ELEMENTS_REGTEST_PORT_LOCAL_ALICE $PROJECT_ELEMENTS_INITIAL_FREE_COINS_ALICE $USER_ALICE_NAME
-		
 		echo "# personaCreate $PROJECT_ELEMENTS_REGTEST_RPC_USER_BOB $PROJECT_ELEMENTS_REGTEST_RPC_PASSWORD_BOB $PROJECT_ELEMENTS_REGTEST_RPC_PORT_BOB $PROJECT_ELEMENTS_REGTEST_PORT_BOB $PROJECT_ELEMENTS_REGTEST_PORT_LOCAL_BOB $PROJECT_ELEMENTS_INITIAL_FREE_COINS_BOB $USER_BOB_NAME"	
 		personaCreate $PROJECT_ELEMENTS_REGTEST_RPC_USER_BOB $PROJECT_ELEMENTS_REGTEST_RPC_PASSWORD_BOB $PROJECT_ELEMENTS_REGTEST_RPC_PORT_BOB $PROJECT_ELEMENTS_REGTEST_PORT_BOB $PROJECT_ELEMENTS_REGTEST_PORT_LOCAL_BOB $PROJECT_ELEMENTS_INITIAL_FREE_COINS_BOB $USER_BOB_NAME
-		
 		echo "# personaAddressAdd \"ALICE\" \"MINER\""
 		personaAddressAdd "ALICE" "MINER"
-			
-        suDoLog "$PROJECT_DIR" "chmodx \"$INSTALL_DIR/../elementsProjectStart.sh\"" "PersonasInstall"
-        suDoLog "$PROJECT_DIR" "chmodx \"$INSTALL_DIR/../elementsProjectStop.sh\"" "PersonasInstall"
-        suDoLog "$PROJECT_DIR" "chmodx \"$INSTALL_DIR/../test/test_transaction_simple.sh\"" "PersonasInstall"
+		suDoLog "$PROJECT_DIR" "chmodx \"$INSTALL_DIR/../elementsProjectStart.sh\"" "PersonasInstall"
+		suDoLog "$PROJECT_DIR" "chmodx \"$INSTALL_DIR/../elementsProjectStop.sh\"" "PersonasInstall"
+		suDoLog "$PROJECT_DIR" "chmodx \"$INSTALL_DIR/../test/test_transaction_simple.sh\"" "PersonasInstall"
 fi
 if [ "$NODE" == "yes" ]	
    then   
