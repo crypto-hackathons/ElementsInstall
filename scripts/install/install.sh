@@ -13,7 +13,12 @@ function sourceForUser()
 	    rm $USER_CONF
     fi
     echo "# source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF"
-    source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF
+    if [ $USER == "root" ]
+   then   
+    su $USER -c "cd $HERE && source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF"
+   else 
+    cd $HERE && source $PROJECT_CONF root root $3 $LIB_DIR >> $USER_CONF
+   fi
     userRights $USER $USER_CONF
     echo "# chmod +x $USER_CONF" 
     chmod +x $USER_CONF
@@ -77,10 +82,10 @@ echo "# WALLET=$WALLET"
 echo "# HERE=`pwd`"
 HERE=`pwd`
 
-echo "# sourceForUser $USER root $ENVIRONNEMENT"
-sourceForUser "$USER" "root" "$ENVIRONNEMENT"
-echo "$ cd $HERE && sourceForUser $USER $USER $ENVIRONNEMENT"
-su $USER -c "cd $HERE && sourceForUser $USER $USER $ENVIRONNEMENT"
+echo "# sourceForUser root root \"$ENVIRONNEMENT\""
+sourceForUser root root "$ENVIRONNEMENT"
+echo "# sourceForUser $USER root \"$ENVIRONNEMENT\""
+sourceForUser "$USER" root "$ENVIRONNEMENT"
 
 if [ -d "$PROJECT_DIR" ]; then
 	echo "# echo \"$PROJECT_DIR exist\""
