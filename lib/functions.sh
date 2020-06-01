@@ -39,6 +39,11 @@ function aliasAll()
 	echo "alias $1=\"$CMD2\""
 	alias $1="$CMD2"
 }
+function userRights()
+{
+    echo "# chmod 0755 $2 && chown $2"
+    chmod 0755 $2 && chown $1 $2
+}
 function userMkdir()
 {
    if [ -d "$2" ]
@@ -48,8 +53,7 @@ function userMkdir()
   fi
   echo "# mkdir $2"
   mkdir $2
-  echo "# chmod 0755 $2 && chown $1 $2"
-  chmod 0755 $2 && chown $1 $2
+  userRights $1 $2
 }
 function userCd()
 {
