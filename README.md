@@ -4,7 +4,9 @@ Tested for Debian 10.
 
 Your machine needs at least 1.5 GB of memory and 12 GB of storage.
 
-A project for build an Elements + Simplicity project environnement (dev, test or prod)
+A project for build an Elements + Simplicity project environnement (dev & test); 
+
+/!\ Not for production
 
 ## Configure:
 
