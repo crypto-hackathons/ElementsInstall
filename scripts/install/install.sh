@@ -2,21 +2,22 @@
 
 function sourceForUser()
 {	
-	PROJECT_CONF="../../conf/elementsProject.conf"
-	export USER_CONF="/home/$1/.elementsProject_$2_$3.conf"	
+    LIB_DIR="../../lib"
+    CONF_DIR="../../conf"
+    PROJECT_CONF="$CONF_DIR/elementsProject.conf"
+    export USER_CONF="/home/$1/.elementsProject_$2_$3.conf"	
 
-	if [ -f "$USER_CONF" ]
+   if [ -f "$USER_CONF" ]
    then   
 	    echo "# rm $USER_CONF"
 	    rm $USER_CONF
     fi
-    echo "# source $PROJECT_CONF $1 root $3 >> $USER_CONF"
-	source $PROJECT_CONF $1 root $3 >> $USER_CONF
-	
-	echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
-	chmod 0755 $USER_CONF && chown $USER $USER_CONF
-	echo "# chmod +x $USER_CONF" 
-	chmod +x $USER_CONF
+    echo "# source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF"
+    source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF	
+    echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
+    chmod 0755 $USER_CONF && chown $USER $USER_CONF
+    echo "# chmod +x $USER_CONF" 
+    chmod +x $USER_CONF
 }
 echo "# "
 echo "# "
@@ -77,8 +78,8 @@ echo "# WALLET=$WALLET"
 echo "# HERE=`pwd`"
 HERE=`pwd`
 
-echo "# sourceForUser $USER "root" $ENVIRONNEMENT"
-sourceForUser $USER "root" $ENVIRONNEMENT
+echo "# sourceForUser $USER root $ENVIRONNEMENT"
+sourceForUser "$USER" "root" "$ENVIRONNEMENT"
 echo "$ cd $HERE && source functions.sh && sourceForUser $USER $USER $ENVIRONNEMENT"
 su $USER -c "cd $HERE && source functions.sh && sourceForUser $USER $USER $ENVIRONNEMENT"
 
