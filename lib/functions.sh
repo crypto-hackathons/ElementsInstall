@@ -1,45 +1,45 @@
 #!/bin/bash
 
-shopt -s expand_aliases
-
 function sourceForUser()
 {	
-	PROJECT_CONF="../../conf/elementsProject.conf"
-	export USER_CONF="/home/$1/.elementsProject_$2_$3.conf"	
+   LIB_DIR="../../lib"
+   CONF_DIR="../../conf"
+   PROJECT_CONF="$CONF_DIR/elementsProject.conf"
+   export USER_CONF="/home/$1/.elementsProject_$2_$3.conf"	
 
-	if [ -f "$USER_CONF" ]
+   if [ -f "$USER_CONF" ]
    then   
 	    echo "# rm $USER_CONF"
 	    rm  $USER_CONF
     fi
-    echo "# source $PROJECT_CONF $1 root $3 >> $USER_CONF"
-	source $PROJECT_CONF $1 root $3 >> $USER_CONF
-	
-	echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
-	chmod 0755 $USER_CONF && chown $USER $USER_CONF
-	echo "# chmod +x $USER_CONF" 
-	chmod +x $USER_CONF
+    echo "# source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF"
+    source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF	
+    echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
+    chmod 0755 $USER_CONF && chown $USER $USER_CONF
+    echo "# chmod +x $USER_CONF" 
+    chmod +x $USER_CONF
 }
-echoPart(){
+function echoPart(){
 
 	echo "echo \"**************\""
 	echo "echo $1"
 	echo "echo \"**************\""
 }
-exportAll()
+function exportAll()
 {
 	echo "export $1=\"$2\""
 	export $1="$2"
 }
-aliasAll()
+function aliasAll()
 {
+	shopt -s expand_aliases
 	CMD=$2
   	CMD2="${CMD//[\"]/\\\"}"
     
 	echo "alias $1=\"$CMD2\""
 	alias $1="$CMD2"
 }
-userMkdir()
+function userMkdir()
 {
    if [ -d "$2" ]
    then
@@ -51,41 +51,41 @@ userMkdir()
   echo "# chmod 0755 $2 && chown $1 $2"
   chmod 0755 $2 && chown $1 $2
 }
-userCd()
+function userCd()
 {
   echo "$ cd $2"
   su $1 -c "cd $2"
 }
-userDo()
+function userDo()
 {
   echo "$ cd $2 && $3"
   su $1 -c "cd $2 && $3"
 }
-suCd()
+function suCd()
 {
   echo "# cd $1"
   cd $1
 }
-suDo(){
+function suDo(){
 
   suCd $1
 
   echo "# $2"
   $2
 }
-userDoLog()
+function userDoLog()
 {
   echo "$ cd $2 && $3 >> $INSTALL_LOG_DIR/$4.log"
   su $1 -c "cd $2 && $3" >> $INSTALL_LOG_DIR/$4.log
 }
-suDoLog()
+function suDoLog()
 {
   suCd $1
   
   echo "# $2 >> $INSTALL_LOG_DIR/$3.log"
   $2 >> $INSTALL_LOG_DIR/$3.log
 }
-userCongigure()
+function userCongigure()
 {  
   CMD="$3"
   CMD3="${CMD//[\"]/\\\"}"
@@ -93,7 +93,7 @@ userCongigure()
   echo "$ cd $2 && ./configure $3"
   su $1 -c "cd $2 && ./configure $CMD"
 }
-userGitClone()
+function userGitClone()
 {
    if [ -d "$5" ]; then
         echo "# echo \"$5 exist\""
@@ -105,12 +105,12 @@ userGitClone()
   echo "$ cd $2 && git clone $3 >> $INSTALL_LOG_DIR/$4.log"
   su $1 -c "cd $2 && git clone $3 >> $INSTALL_LOG_DIR/$4.log"
 }
-userGitChekout()
+function userGitChekout()
 {
    echo "$ cd $2 && git checkout $3"
    su $1 -c "cd $2 && git checkout $3"
 }
-userWgetTarxzf(){
+function userWgetTarxzf(){
 
 	echo "$ cd $2 && wget $3 && tar xzf $3"
 	BASENAME=basename $3
@@ -123,7 +123,7 @@ userWgetTarxzf(){
 	echo "cd $2 && tar xzf $BN"	
 	su $1 -c "cd $2 && tar xzf $BN"
 }
-chmodx()
+function chmodx()
 {
 	echo "# chmod +x $1"
 	chmod +x $1	
