@@ -14,14 +14,10 @@ Your configuration in the conf/elementsProject.conf file.
 
 /!\ The install take around 2h
 
-Ccopy files or
-git clone https://github.com/crypto-hackathons/ElementsInstall.git
-
-And type: 
-
+$ git clone https://github.com/crypto-hackathons/ElementsInstall.git
 $ su
-
-\# cd YOUR_PATH/ElementsInstall/scripts/install && chmod +x install.sh && ./install.sh -u $USER -a yes -k yes -b yes -s yes -n yes -e yes -p yes -v regtest
+\# cd ElementsInstall/scripts/install
+\# chmod +x install.sh && ./install.sh -u $USER -a yes -k yes -b yes -s yes -n yes -e yes -p yes -j yes -w yes -v regtest
 
 u) User: user name (user datas in the home directory)
 
@@ -39,8 +35,11 @@ e) ELEMENTS: "yes" for install
 
 p) PERSONAS: "yes" for install Bob and Alice Elements wallets, Alice is a also a miner
 
-v) ENVIRONNEMENT: [main], [test] or [regtest] for configuration 
+v) NODES: "yes" for install
 
+v) WALLET: "yes" for install Bcoin lib (https://github.com/bcoin-org/bcoin)
+
+v) ENVIRONNEMENT: [main], [test] or [regtest] for configuration 
 
 ## Start:
 
