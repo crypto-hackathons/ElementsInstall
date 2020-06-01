@@ -130,38 +130,47 @@ function chmodx()
 }
 function simplicityenv()
 {
+	echo "# nix-shell -p \"(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])\""
 	nix-shell -p "(import ./default.nix {}).haskellPackages.ghcWithPackages (pkgs: with pkgs; [Simplicity bech32])"
 }
 function btcd()
 {
+	echo "# nohup $PROJECT_BITCOIN_DIR/src/./bitcoind -regtest -datadir=$USER_BITCOIN_DIR &>/dev/null &"
 	nohup $PROJECT_BITCOIN_DIR/src/./bitcoind -regtest -datadir=$USER_BITCOIN_DIR &>/dev/null &
 }
 function btc-cli()
 {
+	echo "# $PROJECT_BITCOIN_DIR/src/./bitcoin-cli -datadir=$USER_BITCOIN_DIR"
 	$PROJECT_BITCOIN_DIR/src/./bitcoin-cli -datadir=$USER_BITCOIN_DIR
 }
 function aliced()
 {	
+	echo "# nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -regtest -datadir=$USER_ALICE_DIR &>/dev/null &"
 	nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -regtest -datadir=$USER_ALICE_DIR &>/dev/null &
 }
 function bobd()
 {
+	echo "# nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -regtest -datadir=$USER_BOB_DIR &>/dev/null &"
 	nohup $PROJECT_ELEMENTS_DIR/src/./elementsd -regtest -datadir=$USER_BOB_DIR &>/dev/null &
 }
 function alice-cli()
 {
+	echo "# $PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_ALICE_DIR"
 	$PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_ALICE_DIR
 }
 function bob-cli()
 {
+	echo "# $PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_BOB_DIR"
 	$PROJECT_ELEMENTS_DIR/src/./elements-cli -datadir=$USER_BOB_DIR
 }
 function aliceGetNewAddress()
 {
+	echo "# alice-cli getnewaddress"
 	alice-cli getnewaddress
 }
 function bobGetNewAddress()
 {
+	echo "# bob-cli getnewaddress"
 	bob-cli getnewaddress
 }
 function personaCreate()
@@ -171,6 +180,7 @@ function personaCreate()
 	   then
 	   CHAIN="elementsmain" 
 	fi	
+	echo "# CHAIN=$CHAIN"
 	echo "# USER_DIR=\"/home/$PROJECT_USER/$7Data\""
 	USER_DIR="/home/$PROJECT_USER/$7Data"
 	echo "# USER_CONF=$USER_DIR/elements.conf"
@@ -208,7 +218,6 @@ function personaCreate()
 }
 function personaAddressAdd()
 {
-
 	echo "**************"
 	echo "Configration of $1_$2"
 	echo "**************"
