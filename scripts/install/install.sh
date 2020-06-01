@@ -79,8 +79,8 @@ HERE=`pwd`
 
 echo "# sourceForUser $USER root $ENVIRONNEMENT"
 sourceForUser "$USER" "root" "$ENVIRONNEMENT"
-echo "$ cd $HERE && source functions.sh && sourceForUser $USER $USER $ENVIRONNEMENT"
-su $USER -c "cd $HERE && source functions.sh && sourceForUser $USER $USER $ENVIRONNEMENT"
+echo "$ cd $HERE && sourceForUser $USER $USER $ENVIRONNEMENT"
+su $USER -c "cd $HERE && sourceForUser $USER $USER $ENVIRONNEMENT"
 
 if [ -d "$PROJECT_DIR" ]; then
 	echo "# echo \"$PROJECT_DIR exist\""
