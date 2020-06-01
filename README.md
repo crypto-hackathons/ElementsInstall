@@ -41,7 +41,7 @@ p) PERSONAS: "yes" for install Bob and Alice Elements wallets, Alice is a also a
 
 v) NODES: "yes" for install
 
-v) WALLET: "yes" for install Bcoin lib (https://github.com/bcoin-org/bcoin)
+w) WALLET: "yes" for install Bcoin lib (https://github.com/bcoin-org/bcoin)
 
 v) ENVIRONNEMENT: [main], [test] or [regtest] for configuration 
 
