@@ -13,9 +13,8 @@ function sourceForUser()
 	    rm $USER_CONF
     fi
     echo "# source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF"
-    source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF	
-    echo "# chmod 0755 $USER_CONF && chown $USER $USER_CONF"
-    chmod 0755 $USER_CONF && chown $USER $USER_CONF
+    source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF
+    userRights $USER $USER_CONF
     echo "# chmod +x $USER_CONF" 
     chmod +x $USER_CONF
 }
@@ -88,16 +87,12 @@ if [ -d "$PROJECT_DIR" ]; then
 else
    echo "# mkdir $PROJECT_DIR"
    mkdir $PROJECT_DIR
-   echo "# chmod 0755 $PROJECT_DIR && chown $USER $PROJECT_DIR"
-   chmod 0755 $PROJECT_DIR && chown $USER $PROJECT_DIR
+   userRights $USER $PROJECT_DIR
 fi   
 
 echo "# echo \"Move to $PROJECT_DIR""
 userGitClone $USER "$PROJECT_DIR" "$INSTALL_GIT" "ElementProject_install" "$INSTALL_DIR"
-echo "# chmod 0755 $PROJECT_DIR && chown $USER $PROJECT_DIR"
-chmod 0755 $INSTALL_DIR && chown $USER $INSTALL_DIR
-echo "# chmod 0755 $PROJECT_DIR && chown $USER $PROJECT_DIR"
-chmod 0755 $INSTALL_DIR && chown $USER $INSTALL_DIR
+userRights $USER $INSTALL_DIR
 echo "# rm -rf $HERE"
 rm -rf $HERE
 
@@ -246,9 +241,9 @@ if [ "$WALLET" == "yes" ]
 	echo "# Bcoin install"
 	echo "# This part take around 2min"
 	echo "# **************"
-    userGitClone $USER "$PROJECT_DIR" "$BCOIN_GIT" "bcoinInstall" "$BCOIN_DIR"
+    	userGitClone $USER "$PROJECT_DIR" "$BCOIN_GIT" "bcoinInstall" "$BCOIN_DIR"
 	suDoLog "$BCOIN_DIR" "npm rebuild" "bcoinInstall"
-    suDoLog "$BCOIN_DIR" "npm install --global" "bcoinInstall"
+    	suDoLog "$BCOIN_DIR" "npm install --global" "bcoinInstall"
 	# bcoin --http-host=0.0.0.0 --api-key $USER --daemon
 fi
 exit
