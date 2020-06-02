@@ -15,7 +15,7 @@ function sourceForUser()
     echo "# source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF"
     if [ $USER == "root" ]
    then   
-            export USER_CONF="/home/$3/.elementsProject_$2_$3.conf"
+            export USER_CONF="/home/$USER/.elementsProject_$2_$3.conf"
 	    su $USER -c "cd $HERE && source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF"
    else 
            export USER_CONF="/home/$1/.elementsProject_$2_$3.conf"
@@ -48,7 +48,7 @@ ENVIRONNEMENT="regtest"
 NODES="yes"
 WALLET="yes"
 
-while getopts u:a:k:b:s:n:e:p:v:j:g: option
+while getopts u:a:k:b:s:n:e:p:v:j:w:g: option
 	do
 		case "${option}"
 		in
@@ -62,6 +62,7 @@ while getopts u:a:k:b:s:n:e:p:v:j:g: option
 			p) PERSONAS=${OPTARG};;
 			v) ENVIRONNEMENT=${OPTARG};;
 			j) NODES=${OPTARG};;
+			w) WALLET=${OPTARG};;
 			g) GREENADDRESS=${OPTARG};;
 		esac
 	done
@@ -80,6 +81,7 @@ echo "# NIX=$NIX"
 echo "# ELEMENTS=$ELEMENTS"
 echo "# PERSONAS=$PERSONAS"
 echo "# ENVIRONNEMENT=$ENVIRONNEMENT"
+echo "# NODES=$NODES"
 echo "# WALLET=$WALLET"
 HERE=`pwd`
 echo "# HERE=$HERE"
