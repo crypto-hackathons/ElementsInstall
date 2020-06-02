@@ -18,7 +18,7 @@ function sourceForUser()
             export USER_CONF="/home/$USER/.elementsProject_$2_$3.conf"
 	    su $USER -c "cd $HERE && source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF"
    else 
-           export USER_CONF="/home/$1/.elementsProject_$2_$3.conf"
+           export USER_CONF="/home/$USER/.elementsProject_$2_$3.conf"
            cd $HERE && source $PROJECT_CONF root root $3 $LIB_DIR >> $USER_CONF
    fi
     userRights $USER $USER_CONF
