@@ -15,9 +15,11 @@ function sourceForUser()
     echo "# source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF"
     if [ $USER == "root" ]
    then   
-    su $USER -c "cd $HERE && source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF"
+            export USER_CONF="/home/$3/.elementsProject_$2_$3.conf"
+	    su $USER -c "cd $HERE && source $PROJECT_CONF $1 root $3 $LIB_DIR >> $USER_CONF"
    else 
-    cd $HERE && source $PROJECT_CONF root root $3 $LIB_DIR >> $USER_CONF
+           export USER_CONF="/home/$1/.elementsProject_$2_$3.conf"
+           cd $HERE && source $PROJECT_CONF root root $3 $LIB_DIR >> $USER_CONF
    fi
     userRights $USER $USER_CONF
     echo "# chmod +x $USER_CONF" 
@@ -79,8 +81,8 @@ echo "# ELEMENTS=$ELEMENTS"
 echo "# PERSONAS=$PERSONAS"
 echo "# ENVIRONNEMENT=$ENVIRONNEMENT"
 echo "# WALLET=$WALLET"
-echo "# HERE=`pwd`"
 HERE=`pwd`
+echo "# HERE=$HERE"
 
 echo "# sourceForUser root root \"$ENVIRONNEMENT\""
 sourceForUser root root "$ENVIRONNEMENT"
