@@ -237,7 +237,7 @@ if [ "$NODE" == "yes" ]
 	echo "# Node install"
 	echo "# This part take around 2min"
 	echo "# **************"
-    suDoLog "$PROJECT_DIR" "curl -sL $NODE_INSTALL_URL | bash -" "nodeInstall"
+    suDoLog "$PROJECT_DIR" "curl -sL $NODE_INSTALL_URL | bash" 
     suDoLog "$PROJECT_DIR" "apt-get install -y nodejs" "nodeInstall"
     suDoLog "$PROJECT_DIR" "npm install -g npm@latest" "nodeInstall"
 fi
